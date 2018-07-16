@@ -8,12 +8,9 @@
 /*We should focus on material in render field.And the material need to know everthing in the world.
 So we put all in the Material file(Such as Lights,Cameras,Objects).*/
 static GLint *open_tex = new GLint[3]{ 0,1,2 };
-enum class MATERIAL_TYPE {
-	PHONG
-};
 Lights lights;
-list<Camera *>cameras;
 Camera *current_cam;
+list<Camera *>cameras;
 list<Object *>objs;
 
 class Material {
@@ -21,16 +18,17 @@ protected:
 	list<Object*>objs;
 	GLuint time_id;
 
-	GLuint tex_id;
-	GLuint UV_id;
-
-	GLuint MVP_id;
-	GLuint M_id;
-	GLuint V_id;
-
+	//environment info
 	GLuint cam_worldid;
 	GLuint li_worldid;
 	GLuint li_colorid;
+	//per-tex info
+	GLuint tex_id;
+	GLuint UV_id;
+	//matrix info
+	GLuint MVP_id;
+	GLuint M_id;
+	GLuint V_id;
 
 	GLuint program;
 };
@@ -38,7 +36,6 @@ protected:
 class PhongMat:public Material {
 public:
 
-	GLuint Normal_id;
 
 	GLuint K_id;
 	GLuint gloss_id;
@@ -47,7 +44,7 @@ public:
 	float gloss;
 
 	
-	virtual void draw() {
+	void draw() {
 		glUseProgram(program);
 		mat4 model_mat;
 		mat4 MVP;

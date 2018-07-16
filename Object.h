@@ -23,9 +23,8 @@ public:
 	virtual void update() {};
 protected:
 	vec3 posi;
+	Material *matl;
 
-	GLuint program;
-	Material matl;
 };
 
 class StaticObj :Object {
