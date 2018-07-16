@@ -1,0 +1,36 @@
+#version 330 core
+#define MAX_LIGHTS 10
+#define MAX_TEXS   3
+
+uniform sampler2D tex[MAX_TEXS];
+uniform vec3 li_color[MAX_LIGHTS];
+uniform vec3 ambient;
+uniform float K;
+uniform float gloss;
+
+in vec3 normal_world;
+in vec3 lidir_world[MAX_LIGHTS];
+in vec3 eyedir_world;
+in vec2 uv_fragment;
+in float numlights;
+
+out vec3 color;
+void main()
+{
+	vec3 diff;
+	for(int i = 0;i < numlights;i++){
+		//diffuse    = li_color[i] * (1 - K) * dot(N,L)
+		float fac    = clamp(dot(normal_world,lidir_world[i]),0,1);
+		diff	     += li_color[i] * fac * (1 - K);
+
+		//specular   = li_color[i] * K * pow(max(0,dot(R,V)),gloss)
+		vec3 R	     = normalize(reflect(eyedir_world,normal_world));
+		float fac_   = pow(max(0,dot(R,eyedir_world)),gloss);
+		vec3 spec    = K * fac_ * li_color[i] ;
+	}
+	//texture
+	vec3 tex	 = texture(tex[0],uv_fragment);
+
+	//final color
+	color		 = (diff + spec + ambient) * tex;
+}
