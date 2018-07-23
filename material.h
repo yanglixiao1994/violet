@@ -1,90 +1,89 @@
 #pragma once
+#define STB_IMAGE_IMPLEMENTATION
 #include "auxiliary.h"
-#include "Scene.h"
-#include "Object.h"
-#include "light.h"
-#include "Camera.h"
+#include "stb_image.h"
 
 /*We should focus on material in render field.And the material need to know everthing in the world.
 So we put all in the Material file(Such as Lights,Cameras,Objects).*/
-static GLint *open_tex = new GLint[3]{ 0,1,2 };
-Lights lights;
-Camera *current_cam;
-list<Camera *>cameras;
-list<Object *>objs;
+
+
+class Texture {
+	enum class TEX_FILTER_METHOD {
+		Nearest,
+		Linear,
+	};
+	enum class TEX_DATATYPE {
+		Float,
+		UChar,
+	};
+	enum class TEX_WARPING_TYPE {
+		Repeat,
+		MirroredRepeat,
+		ClampEdge,
+		ClampBorder,
+	};
+	unsigned char*    data_unsigned_char;
+	float		 *    data_float;
+	int				  width;
+	int				  height;
+	int				  channels;
+	string			  file;
+	TEX_DATATYPE      dtype;
+	TEX_WARPING_TYPE  warping;
+	TEX_FILTER_METHOD filter;
+	Texture(const string&file);
+	void loadFile(const string&file);
+};
 
 class Material {
-protected:
-	list<Object*>objs;
-	GLuint time_id;
-
-	//environment info
-	GLuint cam_worldid;
-	GLuint li_worldid;
-	GLuint li_colorid;
-	//per-tex info
-	GLuint tex_id;
-	GLuint UV_id;
-	//matrix info
-	GLuint MVP_id;
-	GLuint M_id;
-	GLuint V_id;
-
-	GLuint program;
-};
-
-class PhongMat:public Material {
+	enum class MATL_PROPERTY {
+		Diffuse,
+		Specular,
+		Ambient,
+		Emissive,
+	};
+	enum MATL_BLEND_MODEL {
+		Opaque,
+		Masked,
+		Translucent,
+		Additive,
+		Modulate
+	};
+	enum MATL_SHADING_MODEL {
+		FLAT,
+		GOURAUD,
+		PHONG,
+	};
+	enum MATL_DIFFUSE_MODEL {
+		Lambert,
+	};
+	enum MATL_SPECULAR_MODEL {
+		Phong,
+		Blinn_Phong,
+		Cook_Torrance,
+	};
 public:
-
-
-	GLuint K_id;
-	GLuint gloss_id;
-
-	float K;
-	float gloss;
-
-	
-	void draw() {
-		glUseProgram(program);
-		mat4 model_mat;
-		mat4 MVP;
-
-		time_id		      = glGetUniformLocation(program, "time");
-		K_id	          = glGetUniformLocation(program, "K");
-		gloss_id	      = glGetUniformLocation(program, "gloss");
-
-		V_id		      = glGetUniformLocation(program, "V");
-		li_worldid		  = glGetUniformLocation(program, "li_world");
-		li_colorid        = glGetUniformLocation(program, "li_color");
-
-		GLuint cam_id	  = glGetUniformLocation(program, "cam_world");
-		GLuint tex_id	  = glGetUniformLocation(program, "tex");
-
-		glUniform1f(time_id, getTime());
-		glUniform1f(K_id, K);
-		glUniform1f(gloss_id, gloss);
-
-		glUniformMatrix4fv(V_id, 1, GL_FALSE, &current_cam->V[0][0]);
-		
-		glUniform3fv(li_worldid,lights.posis.size(),&lights.posis[0][0])
-		glUniform3fv(li_colorid, lights.colors.size(), &lights.colors[0][0]);
-		glUniform3f(cam_id, current_cam->posi.x, current_cam->posi.y, current_cam->posi.z);
-		glActiveTexture(GL_TEXTURE0);
-		glActiveTexture(GL_TEXTURE1);
-		glActiveTexture(GL_TEXTURE2);
-
-		glUniform1iv(tex_id, 3, open_tex);
-
-
-		for (const auto&obj : objs) {
-			model_mat = obj->model_mat;
-			MVP = current_cam->P * current_cam->V * obj->model_mat;
-			GLuint MVPid = glGetUniformLocation(program, "MVP");
-			GLuint ModelMatid = glGetUniformLocation(program, "M");
-			glUniformMatrix4fv(MVPid, 1, GL_FALSE, &MVP[0][0]);
-			glUniformMatrix4fv(ModelMatid, 1, GL_FALSE, &model_mat[0][0]);
-		}
-
-
-	}
+	Material(
+		MATL_BLEND_MODEL bm= { MATL_BLEND_MODEL::Opaque},
+		MATL_SHADING_MODEL sm= { MATL_SHADING_MODEL::PHONG},
+		MATL_DIFFUSE_MODEL dm= { MATL_DIFFUSE_MODEL::Lambert},
+		MATL_SPECULAR_MODEL spm= { MATL_SPECULAR_MODEL::Phong},
+		bool cullface = {true},
+		bool depthtest = {false}
+	):blend{bm},shading{sm},diffuse{dm},specular{spm},cullface{cullface},depthtest{depthtest}{};
+	Material(const string&file) {};
+	//Compare the pariority
+	bool operator >(const Material&);
+private:
+	MATL_BLEND_MODEL blend;
+	MATL_SHADING_MODEL shading;
+	MATL_DIFFUSE_MODEL diffuse;
+	MATL_SPECULAR_MODEL specular;
+	bool cullface;
+	bool depthtest;
+	vector<Texture>texs;
+	map<string, vec3>param_vec3;
+	map<string, vec2>param_vec2;
+	map<string, float>param_vec1;
 };
+

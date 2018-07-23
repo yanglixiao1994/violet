@@ -41,16 +41,17 @@ set(ALL_LIBS
 
 add_executable(
 	oglfw
+	source/auxiliary.h
 	source/Camera.cpp
 	source/Camera.h
 	source/Light.cpp
 	source/Light.h
 	source/Object.h
 	source/Object.cpp
-	source/allinclude.h
 	source/oglfw.cpp
-	source/wave.vertex
-	source/wave.fragment
+	source/Scene.h
+	source/phong.vertex
+	source/phong.fragment
 )
 target_link_libraries(
 	oglfw
