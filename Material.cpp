@@ -6,3 +6,12 @@ void Texture::loadFile(const string&file) {
 Texture::Texture(const string&file) {
 	loadFile(file);
 }
+
+bool Material::operator <= (const Material&m) {
+	if (blend <= m.blend)
+		if (shading <= m.shading)
+			if (diffuse <= m.diffuse)
+				if (specular <= m.specular)
+					return true;
+	else return false;
+}

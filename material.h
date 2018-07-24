@@ -73,7 +73,7 @@ public:
 	):blend{bm},shading{sm},diffuse{dm},specular{spm},cullface{cullface},depthtest{depthtest}{};
 	Material(const string&file) {};
 	//Compare the pariority
-	bool operator >(const Material&);
+	bool operator <=(const Material&);
 private:
 	MATL_BLEND_MODEL blend;
 	MATL_SHADING_MODEL shading;

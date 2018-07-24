@@ -40,7 +40,7 @@ set(ALL_LIBS
 )
 
 add_executable(
-	oglfw
+	violet
 	source/auxiliary.h
 	source/Camera.cpp
 	source/Camera.h
@@ -50,16 +50,23 @@ add_executable(
 	source/Object.cpp
 	source/oglfw.cpp
 	source/Scene.h
+	source/Scene.h
+	source/RenderSystem.h
+	source/RenderSystem.cpp
+	source/glRenderSystem.h
+	source/glRenderSystem.cpp
+	source/Material.h
+	source/Material.cpp
 	source/phong.vertex
 	source/phong.fragment
 )
 target_link_libraries(
-	oglfw
+	violet
 	${ALL_LIBS}
 	assimp
 )
 
 #set_target_properties(tutorial04 PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/source/" )
-set_target_properties(oglfw PROPERTIES COMPILE_DEFINITIONS "USE_ASSIMP")
-set_target_properties(oglfw PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source/")
-create_target_launcher(oglfw WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/source/")
+set_target_properties(violet PROPERTIES COMPILE_DEFINITIONS "USE_ASSIMP")
+set_target_properties(violet PROPERTIES XCODE_ATTRIBUTE_CONFIGURATION_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source/")
+create_target_launcher(violet WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/source/")
