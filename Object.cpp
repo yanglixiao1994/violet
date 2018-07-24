@@ -2,6 +2,3 @@
 void Object::update() {
 }
 
-void Object::shot(const Camera&cam) {
-	
-}

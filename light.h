@@ -1,7 +1,7 @@
 #pragma once
 #include"auxiliary.h"
 //For convenience of update shader's uniform parameter.
-class Lights {
+class Light {
 public:
 	vector<vec3> posis;
 	vector<vec3> colors;
@@ -15,3 +15,4 @@ public:
 		colors.erase(colors.begin() + i);
 	}
 };
+typedef shared_ptr<Light>	 LightPtr;

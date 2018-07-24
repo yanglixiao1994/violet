@@ -52,3 +52,4 @@ private:
 	float move_speed;
 	float rotate_speed;
 };
+typedef shared_ptr<Camera>   CamPtr;

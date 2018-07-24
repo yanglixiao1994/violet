@@ -50,11 +50,13 @@ add_executable(
 	source/Object.cpp
 	source/oglfw.cpp
 	source/Scene.h
-	source/Scene.h
+	source/Scene.cpp
 	source/RenderSystem.h
 	source/RenderSystem.cpp
 	source/glRenderSystem.h
 	source/glRenderSystem.cpp
+	source/GpuProgram.h
+	source/GpuProgram.cpp
 	source/Material.h
 	source/Material.cpp
 	source/phong.vertex

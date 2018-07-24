@@ -1,6 +1,5 @@
 #pragma once
 #include "auxiliary.h"
-#include"Camera.h"
 #include"RenderSystem.h"
 #include "Mesh.h"
 using namespace glm;
@@ -9,10 +8,10 @@ class Object {
 protected:
 	vec3 posi;
 
-	list<Object*>childs;
-	Object      *father;
+	list<ObjPtr>childs;
+	ObjPtr      father;
 
-	Mesh          *mesh;
+	Mesh         *mesh;
 
 	bool dirty;
 	bool visible;
@@ -45,15 +44,14 @@ public:
 		}
 	}
 
-	void setFather(Object *obj) {
+	void setFather(const ObjPtr&obj) {
 		father = obj;
 	}
-	void insertChild(Object *obj) {
+	void insertChild(const ObjPtr&obj) {
 		childs.push_back(obj);
 	}
 
 	virtual void update();
-	virtual void shot(const Camera&);
 
 	Object(
 		const vec3&posi = vec3{ 0,0,0 },
@@ -72,5 +70,6 @@ public:
 
 
 };
+typedef shared_ptr<Object>  ObjPtr;
 
 
