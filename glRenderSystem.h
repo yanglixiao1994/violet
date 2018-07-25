@@ -1,6 +1,7 @@
 #pragma once
 #include "RenderSystem.h"
 #include "material.h"
+
 class glRenderSystem :public RenderSystem {
 	void setGpuProgram()final override;
 	void updateGlobalEnvironmentInfo()final override;

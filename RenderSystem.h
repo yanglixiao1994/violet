@@ -1,5 +1,6 @@
 #pragma once
-#include "auxiliary.h"
+#include "light.h"
+#include "Camera.h"
 class RenderSystem{
 	virtual void setGpuProgram() = 0;
 	virtual void updateGlobalEnvironmentInfo() = 0;

@@ -1,6 +1,5 @@
 #pragma once
 #include "auxiliary.h"
-#include"RenderSystem.h"
 #include "Mesh.h"
 using namespace glm;
 
