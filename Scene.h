@@ -5,11 +5,6 @@
 #include "RenderSystem.h"
 
 
-typedef list<CamPtr>  CamList;
-typedef list<MatlPtr> MatlList;
-typedef list<ObjPtr>  ObjList;
-typedef list<LightPtr>LightPtr;
-
 class Scene {
 private:
 	Object * _root;

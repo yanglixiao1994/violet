@@ -6,7 +6,6 @@ void Texture::loadFile(const std::string&file) {
 Texture::Texture(const std::string&file) {
 	loadFile(file);
 }
-
 Material::Material(
 	MATL_BLEND_MODEL bm = { MATL_BLEND_MODEL::Opaque },
 	MATL_SHADING_MODEL sm = { MATL_SHADING_MODEL::Phong },

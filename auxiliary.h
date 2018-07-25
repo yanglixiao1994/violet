@@ -13,10 +13,14 @@
 #include <fstream>
 #include <sstream>
 using namespace std;
-using namespace glm;
 
 #define WINDOW_HEIGHT 1024
 #define WINDOW_WIDTH 768
+
+typedef unsigned int uint32;
+typedef unsigned long uint64;
+typedef unsigned short uint32;
+typedef unsigned char unint8;
 
 #ifdef NDEBUG
 #define Assert(expr) expr

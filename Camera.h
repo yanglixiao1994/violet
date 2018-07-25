@@ -7,9 +7,13 @@ enum class CAM_CONTROL_TYPE {
 };
 class Camera:public Object{
 public:
-	mat4 V;
-	mat4 P;
 
+	mat4& getViewMat() {
+		return V;
+	}
+	mat4& getProjMat() {
+		return P;
+	}
 	void setSight(float near = .1f, float far = 1000.f) {
 		near = near;
 		far = far;
@@ -45,6 +49,8 @@ public:
 	}
 	virtual void update() {};
 private:
+	mat4 V;
+	mat4 P;
 	CAM_CONTROL_TYPE ctr;
 	float far, near;
 	float aspect;
@@ -53,3 +59,4 @@ private:
 	float rotate_speed;
 };
 typedef shared_ptr<Camera>   CamPtr;
+typedef list<CamPtr>		CamList;

@@ -31,6 +31,9 @@ class Texture {
 	Texture(const string&file);
 	void loadFile(const string&file);
 };
+typedef map<std::string, vec3> Param3f;
+typedef map<std::string, vec2> Param2f;
+typedef map<std::string, float> Param1f;
 class Material {
 
 	//The enum'order is the render order.
@@ -78,17 +81,17 @@ public:
 	bool operator <=(const Material&)const;
 	string& getGpuProgramName() { return _gpu_program; }
 private:
-	string _gpu_program;
-	MATL_BLEND_MODEL _blend;
-	MATL_SHADING_MODEL _shading;
-	MATL_DIFFUSE_MODEL _diffuse;
+	string				_gpu_program;
+	MATL_BLEND_MODEL	_blend;
+	MATL_SHADING_MODEL  _shading;
+	MATL_DIFFUSE_MODEL	_diffuse;
 	MATL_SPECULAR_MODEL _specular;
-	bool _cullface;
-	bool _depthtest;
-	vector<Texture>_texs;
-	map<std::string, vec3>_param_vec3;
-	map<std::string, vec2>_param_vec2;
-	map<std::string, float>_param_vec1;
+	bool				_cullface;
+	bool				_depthtest;
+	vector<Texture>		_texs;
+	Param1f				_param1f;
+	Param2f				_param2f;
+	Param3f				_param3f;
 };
 typedef shared_ptr<Material> MatlPtr;
-
+typedef list<MatlPtr> MatlList;

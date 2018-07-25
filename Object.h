@@ -70,5 +70,5 @@ public:
 
 };
 typedef shared_ptr<Object>  ObjPtr;
-
+typedef list<ObjPtr> ObjList;
 
