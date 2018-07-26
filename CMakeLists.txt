@@ -59,8 +59,10 @@ add_executable(
 	source/GpuProgram.cpp
 	source/Material.h
 	source/Material.cpp
-	source/HardwareBuffer.h
-	source/HardwareBuffer.cpp
+	source/Mesh.h
+	source/Mesh.cpp
+	source/GpuBuffer.h
+	source/GpuBuffer.cpp
 	source/phong.vertex
 	source/phong.fragment
 )

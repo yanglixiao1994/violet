@@ -20,7 +20,16 @@ using namespace std;
 typedef unsigned int uint32;
 typedef unsigned long uint64;
 typedef unsigned short uint16;
-typedef unsigned char unint8;
+typedef unsigned char uint8;
+
+typedef map<std::string, glm::vec3> Param3f;
+typedef map<std::string, vector<glm::vec3>> Param3vf;
+typedef map<std::string, glm::vec2> Param2f;
+typedef map<std::string, vector<glm::vec2>> Param2vf;
+typedef map<std::string, float> Param1f;
+typedef map<std::string, vector<float>> Param1vf;
+
+typedef map<std::string, vector<int>> Param1i;
 
 #ifdef NDEBUG
 #define Assert(expr) expr

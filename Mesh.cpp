@@ -17,14 +17,34 @@ void Mesh::loadMesh(const string&file) {
 	for (int i = 0; i < scene->mNumMeshes; i++) {
 		submesh sm;
 		aiMesh *mesh = scene->mMeshes[i];
+		Assert(mesh->mPrimitiveTypes == aiPrimitiveType_TRIANGLE);
+		sm._primitive = PRIMITIVE_TYPE::Triangle;
+		Assert(mesh->HasFaces());
+		sm._num_vertex_attributes++;
+		Assert(mesh->HasNormals());
+		sm._num_vertex_attributes++;
+		Assert(mesh->HasPositions());
+		sm._num_vertex_attributes++;
+		Assert(mesh->HasTextureCoords(0));
+		sm._num_vertex_attributes++;
+
+		//Load Submesh
 		for (int j = 0; j < mesh->mNumVertices; j++) {
-			sm.vertices.push_back(vec3{ mesh->mVertices[j].x,mesh->mVertices[j].y ,mesh->mVertices[j].z });
-			sm.normals.push_back(vec3{ mesh->mNormals[j].x,mesh->mNormals[j].y ,mesh->mNormals[j].z });
+			sm._vertices.push_back(glm::vec3{ mesh->mVertices[j].x,mesh->mVertices[j].y ,mesh->mVertices[j].z });
+			sm._normals.push_back(glm::vec3{ mesh->mNormals[j].x,mesh->mNormals[j].y ,mesh->mNormals[j].z });
 			for (int k = 0; k < mesh->GetNumUVChannels; k++) {
-				sm.UVs[k].push_back(vec3{ mesh->mTextureCoords[k][j].x,mesh->mTextureCoords[k][j].y,mesh->mTextureCoords[k][j].z });
+				sm._UVs[k].push_back(glm::vec3{ mesh->mTextureCoords[k][j].x,mesh->mTextureCoords[k][j].y,mesh->mTextureCoords[k][j].z });
 			}
 		}
 
+		for (int j = 0; j < mesh->mNumFaces; j++) {
+			auto face = mesh->mFaces[j];
+			Assert(face.mNumIndices == 3);
+			for (int k = 0; k < 3; k++) {
+				sm._indices.push_back(face.mIndices[k]);
+			}
+		}
+		//Load Material
 		shared_ptr<Material>matlp = make_shared<Material>();
 		aiColor3D ambient;
 		aiColor3D diffuse;
@@ -32,17 +52,17 @@ void Mesh::loadMesh(const string&file) {
 		aiColor3D emissive;
 
 		scene->mMaterials[mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_AMBIENT, ambient);
-		matlp->param_vec3.insert(pair<string, vec3>{"ambient", vec3{ambient.r,ambient.g,ambient.b}});
+		matlp->insertParam3f.insert(pair<string, glm::vec3>{"ambient", glm::vec3{ambient.r,ambient.g,ambient.b}});
 		scene->mMaterials[mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_AMBIENT, diffuse);
-		matlp->param_vec3.insert(pair<string, vec3>{"diffuse", vec3{ diffuse.r,diffuse.g,diffuse.b }});
+		matlp->insertParam3f.insert(pair<string, glm::vec3>{"diffuse", glm::vec3{ diffuse.r,diffuse.g,diffuse.b }});
 		scene->mMaterials[mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_AMBIENT, emissive);
-		matlp->param_vec3.insert(pair<string, vec3>{"emissive", vec3{ emissive.r,emissive.g,emissive.b }});
+		matlp->insertParam3f.insert(pair<string, glm::vec3>{"emissive", glm::vec3{ emissive.r,emissive.g,emissive.b }});
 		
 		auto texnum = scene->mMaterials[mesh->mMaterialIndex]->GetTextureCount(aiTextureType_DIFFUSE);
 		for (int i = 0; i < texnum; i++) {
 
 		}
-		sm.matl = matlp;
-
+		sm._matl = matlp;
+		_submeshs.push_back(sm);
 	}
 }

@@ -14,7 +14,7 @@ protected:
 
 	bool dirty;
 	bool visible;
-	bool throwshadow;
+	bool shadow;
 public:
 	mat4 toWorld;
 

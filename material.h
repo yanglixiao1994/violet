@@ -11,7 +11,7 @@ class Texture {
 	};
 	enum class TEX_DATATYPE {
 		Float,
-		UChar,
+		UINT8,
 	};
 	enum class TEX_WARPING_TYPE {
 		Repeat,
@@ -19,30 +19,23 @@ class Texture {
 		ClampEdge,
 		ClampBorder,
 	};
-	unsigned char*    data_unsigned_char;
-	float		 *    data_float;
-	int				  width;
-	int				  height;
-	int				  channels;
-	string			  file;
-	TEX_DATATYPE      dtype;
-	TEX_WARPING_TYPE  warping;
-	TEX_FILTER_METHOD filter;
+public:
 	Texture(const string&file);
 	void loadFile(const string&file);
+private:
+	uint8		*		_data_uint8;
+	float		*		_data_float;
+	int					_width;
+	int					_height;
+	int					_channels;
+	string				_file;
+	TEX_DATATYPE		_data_type;
+	TEX_WARPING_TYPE	_warping;
+	TEX_FILTER_METHOD	_filter;
 };
-typedef map<std::string, vec3> Param3f;
-typedef map<std::string, vec2> Param2f;
-typedef map<std::string, float> Param1f;
 class Material {
 
-	//The enum'order is the render order.
-	enum class MATL_PROPERTY {
-		Diffuse,
-		Specular,
-		Ambient,
-		Emissive,
-	};
+	//The enum is arranged in the render pariority.
 	enum MATL_BLEND_MODEL {
 		Opaque,
 		Masked,
@@ -79,7 +72,14 @@ public:
 	Material(const std::string&) {};
 	//Compare the pariority
 	bool operator <=(const Material&)const;
-	string& getGpuProgramName() { return _gpu_program; }
+	string getGpuProgramName()const { return _gpu_program; }
+	void insertParam3f(const string&name, const glm::vec3&param);
+	void insertParam2f(const string&name, const glm::vec2&param);
+	void insertParam1f(const string&name, float param);
+	glm::vec3 getParam3f(const string&name)const;
+	glm::vec2 getParam2f(const string&name)const;
+	float getParam1f(const string&name)const;
+
 private:
 	string				_gpu_program;
 	MATL_BLEND_MODEL	_blend;

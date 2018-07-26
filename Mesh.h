@@ -1,19 +1,33 @@
 #pragma once
-#include"auxiliary.h"
-#include"Material.h"
+#include "auxiliary.h"
+#include "Material.h"
+#include "GpuBuffer.h"
+
+enum class PRIMITIVE_TYPE {
+	Point,
+	Line,
+	Line_Strip,
+	Triangle,
+	Triangle_strip,
+	Triangle_fan
+};
+struct submesh {
+	vector<glm::vec3>_vertices;
+	vector<unsigned int>_indices;
+	vector<glm::vec3>_normals;
+	vector<glm::vec3>_UVs[5];
+	Param3vf _param3v;
+	Param2vf _param2v;
+	Param1vf _param1v;
+	shared_ptr<Material>_matl;
+	uint8 _num_vertex_attributes;
+	PRIMITIVE_TYPE _primitive;
+	GpuBufferList  _gpubuffers;
+};
 class Mesh {
-	struct submesh {
-		vector<vec3>vertices;
-		vector<unsigned int>indices;
-		vector<vec3>normals;
-		vector<vec3>UVs[5];
-		map<string, vector<vec3>>mesh_param_vec3;
-		map<string, vector<vec2>>mesh_param_vec2;
-		map<string, vector<float>>mesh_param_vec1;
-		shared_ptr<Material>matl;
-	};
 public:
+	Mesh(){};
 	void loadMesh(const string&);
 private:
-	vector<submesh>submeshs;
+	vector<submesh>	_submeshs;
 };

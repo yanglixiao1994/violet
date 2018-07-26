@@ -20,7 +20,6 @@ void glRenderSystem::updateGlobalEnvironmentInfo(const globalEnvironmentInfo&gei
 	glUniformMatrix4fv(V, 1, GL_FALSE, &geinfo._cur_cam->getViewMat()[0][0]);
 	GLuint P = glGetUniformLocation(_cur_gpu_program, "P");
 	glUniformMatrix4fv(P, 1, GL_FALSE, &geinfo._cur_cam->getProjMat()[0][0]);
-
 }
 
 void glRenderSystem::updatePerObjectInfo(const perObjectInfo&pobj) {
@@ -40,6 +39,8 @@ void glRenderSystem::updatePerObjectInfo(const perObjectInfo&pobj) {
 	}
 }
 
-void glRenderSystem::bindPerVertexParameters() {
+void glRenderSystem::bindPerVertexAttributes(const submesh&sm) {
+	if (sm._gpubuffer->isActive()) {
 
+	}
 }
