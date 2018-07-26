@@ -19,7 +19,7 @@ using namespace std;
 
 typedef unsigned int uint32;
 typedef unsigned long uint64;
-typedef unsigned short uint32;
+typedef unsigned short uint16;
 typedef unsigned char unint8;
 
 #ifdef NDEBUG

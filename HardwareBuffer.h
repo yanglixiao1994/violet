@@ -13,7 +13,7 @@ enum class BUFFER_TYPE {
 };
 class HardwareBuffer {
 public:
-	HardwareBuffer() {};
+	HardwareBuffer():_active(false),_size(0) {};
 	~HardwareBuffer();
 	void createBuffer(BUFFER_USAGE, BUFFER_TYPE, uint32 size, void* pSource);
 	void readData(uint32 offset,uint32 length,void *pDest);
