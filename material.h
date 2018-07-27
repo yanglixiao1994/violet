@@ -35,7 +35,6 @@ private:
 	TEX_FILTER_METHOD	_filter;
 };
 class Material {
-
 	//The enum is arranged in the render pariority.
 	enum MATL_BLEND_MODEL {
 		Opaque,
@@ -88,9 +87,6 @@ public:
 	glm::vec3	getParam3f(const string&name)const;
 	glm::vec2	getParam2f(const string&name)const;
 	float		getParam1f(const string&name)const;
-	Param1fV&	getParam1fV() { return _param1fv; }
-	Param2fV&	getParam2fV() { return _param2fv; }
-	Param3fV&	getParam3fV() { return _param3fv; }
 
 	MATL_BLEND_MODEL	getBlendModel() { return _blend; }
 	MATL_DIFFUSE_MODEL	getDiffuseModel() { return _diffuse; }
@@ -106,6 +102,7 @@ public:
 	void				setDepthTest(bool depthTest) { _depthtest = depthTest; }
 
 private:
+	friend class glRenderSystem;
 	//Render state
 	MATL_BLEND_MODEL	_blend;
 	MATL_SHADING_MODEL  _shading;

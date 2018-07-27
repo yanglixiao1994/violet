@@ -13,8 +13,8 @@ enum class PRIMITIVE_TYPE {
 };
 typedef map<ATTRIBUTE_TYPE, vector<int>> Paramv1i;
 struct SubMesh {
-	VertAttr3fV _vertattr3v;
-	VertAttr2fV _vertattr2v;
+	VertAttr3fV _vertattr3fv;
+	VertAttr2fV _vertattr2fv;
 	VertAttr1fV _vertattr1fv;
 	VertAttr1iV _vertattr1iv;
 	shared_ptr<Material>_matl;

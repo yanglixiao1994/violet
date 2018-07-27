@@ -23,17 +23,17 @@ void glRenderSystem::bindGlobalEnvironmentInfo(const globalEnvironmentInfo&geinf
 }
 
 void glRenderSystem::bindMaterial(const Material&mat) {
-	for (const auto &para3 : mat.getParam3fV()) {
+	for (const auto &para3 : mat._param1fv) {
 		GLuint paramid = glGetUniformLocation(_cur_gpu_program, para3.first.c_str());
 		glUniform3f(paramid, para3.second.x, para3.second.y, para3.second.z);
 	}
 
-	for (const auto &para2 : mat._param2f) {
+	for (const auto &para2 : mat._param2fv) {
 		GLuint paramid = glGetUniformLocation(_cur_gpu_program, para2.first.c_str());
 		glUniform2f(paramid, para2.second.x, para2.second.y);
 	}
 
-	for (const auto &para1 : pobj._param1f) {
+	for (const auto &para1 : mat._param1fv) {
 		GLuint paramid = glGetUniformLocation(_cur_gpu_program, para1.first.c_str());
 		glUniform1f(paramid, para1.second);
 	}
@@ -65,24 +65,32 @@ GpuBufferPtr glRenderSystem::createGpuBuffer(BUFFER_USAGE usage, ATTRIBUTE_TYPE 
 	//_active = true;
 }
 
-void glRenderSystem::uploadSubMesh2Gpu(const SubMesh&sm) {
-	if (sm._num_vertex_attributes != sm._gpubuffers.size()) {
-		for (int i = 0; i < sm._num_vertex_attributes; i++) {
-
-			for (const auto&p1i : sm._param1i) {
-
-			}
-			glGpuBuffer gpb;
-			gpb.createBuffer(BUFFER_USAGE::Static, )
+void glRenderSystem::uploadSubMesh2Gpu(SubMesh&submesh) {
+	if (submesh._num_vertex_attributes != submesh._gpubuffers.size()) {
+		submesh._gpubuffers.clear();
+		Assert(submesh._num_vertex_attributes != 
+			submesh._vertattr1fv.size() + submesh._vertattr2fv.size() + submesh._vertattr3fv.size());
+		for (const auto&p3:submesh._vertattr3fv) {
+			glGpuBuffer gbuff;
+			gbuff.createBuffer(BUFFER_USAGE::Static, p3.first, 
+				p3.second.size() * sizeof(vec3), (void*)&(p3.second[0][0]));
+		}
+		for (const auto&p2 : submesh._vertattr2fv) {
+			glGpuBuffer gbuff;
+			gbuff.createBuffer(BUFFER_USAGE::Static, p2.first,
+				p2.second.size() * sizeof(vec2), (void*)&(p2.second[0][0]));
+		}
+		for (const auto&p1 : submesh._vertattr1fv) {
+			glGpuBuffer gbuff;
+			gbuff.createBuffer(BUFFER_USAGE::Static, p1.first,
+				p1.second.size() * sizeof(float), (void*)&(p1));
 		}
 	}
 }
 
-void glRenderSystem::bindSubMesh(const SubMesh&sm) {
-	if (sm._num_vertex_attributes != sm._gpubuffers.size()) {
-		for (int i = 0; i < sm._num_vertex_attributes; i++) {
-			glGpuBuffer gpb;
-			gpb.createBuffer(BUFFER_USAGE::Static, ATTRIBUTE_TYPE::)
-		}
-	}
+void glRenderSystem::bindSubMesh(const SubMesh&submesh) {
+	if (submesh._num_vertex_attributes != submesh._gpubuffers.size()) {
+		submesh._gpubuffers.clear();
+		Assert(submesh._num_vertex_attributes !=
+			submesh._vertattr1fv.size() + submesh._vertattr2fv.size() + submesh._vertattr3fv.size());
 }

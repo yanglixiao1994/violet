@@ -6,7 +6,7 @@ class glRenderSystem :public RenderSystem {
 	void setGpuProgram()final override;
 	void bindGlobalEnvironmentInfo(const globalEnvironmentInfo&)final override;
 	void bindMaterial(const Material&)final override;
-	void uploadSubMesh2Gpu(const SubMesh&)final override;
+	void uploadSubMesh2Gpu(SubMesh&)final override;
 	void bindSubMesh(const SubMesh&)final override;
 	void createWindow(const string&title, uint width, uint height, bool fullscreen)final override;
 	GpuBufferPtr createGpuBuffer(BUFFER_USAGE, ATTRIBUTE_TYPE, uint32 size, void* pSource)final override;
