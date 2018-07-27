@@ -5,10 +5,14 @@ using namespace glm;
 
 class Object {
 protected:
-	vec3 posi;
+	//The relative information
+	vec3 _posi;
+	vec3 _scaler;
+	vec3 _rotate;
+	mat4 _toWorld;
 
-	list<ObjPtr>childs;
-	ObjPtr      father;
+	list<ObjPtr>_childs;
+	ObjPtr      _father;
 
 	Mesh         *mesh;
 
@@ -16,7 +20,6 @@ protected:
 	bool visible;
 	bool shadow;
 public:
-	mat4 toWorld;
 
 	void reset() {
 		toWorld = mat4(1.f);
@@ -50,6 +53,7 @@ public:
 		childs.push_back(obj);
 	}
 
+	mat4 getToWorldMat();
 	virtual void update();
 
 	Object(

@@ -7,13 +7,13 @@
 
 class Scene {
 private:
-	Object * _root;
-	RenderSystem *_render;
+	Object *		 _root;
+	RenderSystem *	 _render;
 
-	CamPtr _cur_cam;
+	CamPtr			 _cur_cam;
 
-	MatlList _matls;
-	ObjList _objs;
+	MatlList	     _matls;
+	ObjList			 _objs;
 
 public:
 	void insertMatl(const MatlPtr&matl);

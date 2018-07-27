@@ -4,7 +4,7 @@ void glRenderSystem::setGpuProgram() {
 	glUseProgram(_cur_gpu_program);
 }
 
-void glRenderSystem::updateGlobalEnvironmentInfo(const globalEnvironmentInfo&geinfo) {
+void glRenderSystem::bindGlobalEnvironmentInfo(const globalEnvironmentInfo&geinfo) {
 	int i = 0;
 	for (const auto &curl:geinfo._lights) {
 		if (i >= MAX_LIGHT_NUM)break;
@@ -22,13 +22,13 @@ void glRenderSystem::updateGlobalEnvironmentInfo(const globalEnvironmentInfo&gei
 	glUniformMatrix4fv(P, 1, GL_FALSE, &geinfo._cur_cam->getProjMat()[0][0]);
 }
 
-void glRenderSystem::updatePerObjectInfo(const perObjectInfo&pobj) {
-	for (const auto &para3 : pobj._param3f) {
+void glRenderSystem::bindMaterial(const Material&mat) {
+	for (const auto &para3 : mat.getParam3fV()) {
 		GLuint paramid = glGetUniformLocation(_cur_gpu_program, para3.first.c_str());
 		glUniform3f(paramid, para3.second.x, para3.second.y, para3.second.z);
 	}
 
-	for (const auto &para2 : pobj._param2f) {
+	for (const auto &para2 : mat._param2f) {
 		GLuint paramid = glGetUniformLocation(_cur_gpu_program, para2.first.c_str());
 		glUniform2f(paramid, para2.second.x, para2.second.y);
 	}
@@ -39,8 +39,50 @@ void glRenderSystem::updatePerObjectInfo(const perObjectInfo&pobj) {
 	}
 }
 
-void glRenderSystem::bindPerVertexAttributes(const submesh&sm) {
-	if (sm._gpubuffer->isActive()) {
+GpuBufferPtr glRenderSystem::createGpuBuffer(BUFFER_USAGE usage, ATTRIBUTE_TYPE type, uint32 size, void* pSource) {
+	GpuBufferPtr gbuf = make_shared<GpuBuffer>(new glGpuBuffer{});
+	//if (gbuf->_active)return;
+	GLuint id;
+	glGenBuffers(1, &id);
+	gbuf->setBufferId(id);
+	GLenum gl_type, gl_usage;
+	switch (usage) {
+	case BUFFER_USAGE::Static: {
+		gl_usage = GL_STATIC_DRAW;
+	}
+	case BUFFER_USAGE::Dynamic: {
+		gl_usage = GL_DYNAMIC_DRAW;
+	}
+	}
+	if (type == ATTRIBUTE_TYPE::Index) {
+		gl_type = GL_ELEMENT_ARRAY_BUFFER;
+	}
+	else gl_type = GL_ARRAY_BUFFER;
+	glBindBuffer(gl_type, 1);
+	glBufferData(gl_type, size, pSource, gl_usage);
+	gbuf->setBufferUsage(usage);
+	gbuf->setAttributeType(type);
+	//_active = true;
+}
 
+void glRenderSystem::uploadSubMesh2Gpu(const SubMesh&sm) {
+	if (sm._num_vertex_attributes != sm._gpubuffers.size()) {
+		for (int i = 0; i < sm._num_vertex_attributes; i++) {
+
+			for (const auto&p1i : sm._param1i) {
+
+			}
+			glGpuBuffer gpb;
+			gpb.createBuffer(BUFFER_USAGE::Static, )
+		}
+	}
+}
+
+void glRenderSystem::bindSubMesh(const SubMesh&sm) {
+	if (sm._num_vertex_attributes != sm._gpubuffers.size()) {
+		for (int i = 0; i < sm._num_vertex_attributes; i++) {
+			glGpuBuffer gpb;
+			gpb.createBuffer(BUFFER_USAGE::Static, ATTRIBUTE_TYPE::)
+		}
 	}
 }

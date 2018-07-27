@@ -11,14 +11,12 @@ enum class PRIMITIVE_TYPE {
 	Triangle_strip,
 	Triangle_fan
 };
-struct submesh {
-	vector<glm::vec3>_vertices;
-	vector<unsigned int>_indices;
-	vector<glm::vec3>_normals;
-	vector<glm::vec3>_UVs[5];
-	Param3vf _param3v;
-	Param2vf _param2v;
-	Param1vf _param1v;
+typedef map<ATTRIBUTE_TYPE, vector<int>> Paramv1i;
+struct SubMesh {
+	VertAttr3fV _vertattr3v;
+	VertAttr2fV _vertattr2v;
+	VertAttr1fV _vertattr1fv;
+	VertAttr1iV _vertattr1iv;
 	shared_ptr<Material>_matl;
 	uint8 _num_vertex_attributes;
 	PRIMITIVE_TYPE _primitive;
@@ -29,5 +27,5 @@ public:
 	Mesh(){};
 	void loadMesh(const string&);
 private:
-	vector<submesh>	_submeshs;
+	vector<SubMesh>	_submeshs;
 };
