@@ -14,43 +14,46 @@ protected:
 	list<ObjPtr>_childs;
 	ObjPtr      _father;
 
-	Mesh         *mesh;
+	Mesh         *_mesh;
 
-	bool dirty;
-	bool visible;
-	bool shadow;
+	bool _dirty;
+	bool _visible;
+	bool _shadow;
 public:
+	vec3 getPosition() {
+		return _posi;
+	}
 
 	void reset() {
-		toWorld = mat4(1.f);
-		for (auto &child : childs) {
+		_toWorld = mat4(1.f);
+		for (auto &child : _childs) {
 			child->reset();
 		}
 	}
 	void scale(const vec3&factor) {
-		toWorld = ::scale(toWorld, factor);
-		for (auto &child : childs) {
+		_toWorld = ::scale(_toWorld, factor);
+		for (auto &child : _childs) {
 			child->scale(factor);
 		}
 	}
 	void rotate(float deg,const vec3&axis) {
-		toWorld = ::rotate(toWorld, deg / 180.0f, axis);
-		for (auto &child : childs) {
+		_toWorld = ::rotate(_toWorld, deg / 180.0f, axis);
+		for (auto &child : _childs) {
 			child->rotate(deg,axis);
 		}
 	}
 	void move(const vec3&step) {
-		toWorld = translate(toWorld, step);
-		for (auto &child : childs) {
+		_toWorld = translate(_toWorld, step);
+		for (auto &child : _childs) {
 			child->move(step);
 		}
 	}
 
 	void setFather(const ObjPtr&obj) {
-		father = obj;
+		_father = obj;
 	}
 	void insertChild(const ObjPtr&obj) {
-		childs.push_back(obj);
+		_childs.push_back(obj);
 	}
 
 	mat4 getToWorldMat();
@@ -64,12 +67,12 @@ public:
 		bool visible = true,
 		bool throwshadow = true
 		) :
-		posi{ posi },
-		father{ father },
-		mesh{ mesh },
-		dirty{ dirty },
-		visible{ visible },
-		throwshadow{ throwshadow } {};
+		_posi{ posi },
+		_father{ father },
+		_mesh{ mesh },
+		_dirty{ dirty },
+		_visible{ visible },
+		_shadow{ throwshadow } {};
 
 
 };

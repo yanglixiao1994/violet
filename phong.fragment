@@ -7,12 +7,12 @@ uniform vec3 li_color[MAX_LIGHTS];
 uniform vec3 ambient;
 uniform float K;
 uniform float gloss;
+uniform int numlights;
 
 in vec3 normal_world;
 in vec3 lidir_world[MAX_LIGHTS];
 in vec3 eyedir_world;
 in vec2 uv_fragment;
-in float numlights;
 
 out vec3 color;
 void main()

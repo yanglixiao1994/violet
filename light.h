@@ -5,7 +5,6 @@ class Light {
 public:
 	vec3 posi;
 	vec3 color;
-
 };
 typedef shared_ptr<Light>	 LightPtr;
-typedef list<LightPtr>  LightList;
+typedef vector<LightPtr>  LightVec;

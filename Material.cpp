@@ -30,25 +30,25 @@ bool Material::operator <= (const Material&m)const {
 }
 
 void Material::insertParam1f(const string&name, float param) {
-	_param1f.insert(std::pair<string, float>(name, param));
+	_param1fv.insert(std::pair<string, float>(name, param));
 }
 
 void Material::insertParam2f(const string&name, const glm::vec2& param) {
-	_param2f.insert(std::pair<string, glm::vec2>(name, param));
+	_param2fv.insert(std::pair<string, glm::vec2>(name, param));
 }
 
 void Material::insertParam3f(const string&name, const glm::vec3& param) {
-	_param3f.insert(std::pair<string, glm::vec3>(name, param));
+	_param3fv.insert(std::pair<string, glm::vec3>(name, param));
 }
 
 float Material::getParam1f(const string&name)const {
-	return _param1f.at(name);
+	return _param1fv.at(name);
 }
 
 glm::vec2 Material::getParam2f(const string&name)const {
-	return _param2f.at(name);
+	return _param2fv.at(name);
 }
 
 glm::vec3 Material::getParam3f(const string&name)const {
-	return _param3f.at(name);
+	return _param3fv.at(name);
 }

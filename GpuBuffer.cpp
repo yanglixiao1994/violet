@@ -9,7 +9,7 @@ void glGpuBuffer::deleteBuffer() {
 		glDeleteBuffers(_size, &_buffer_id);
 }
 
-void glGpuBuffer::createBuffer(BUFFER_USAGE usage, ATTRIBUTE_TYPE type, uint32 size, void* pSource) {
+void glGpuBuffer::createBuffer(BUFFER_USAGE usage, ATTRIBUTE_TYPE type, uint32 dataType,uint32 size, void* pSource) {
 	if (_active)return;
 	
 	glGenBuffers(1, &_buffer_id);
@@ -32,6 +32,7 @@ void glGpuBuffer::createBuffer(BUFFER_USAGE usage, ATTRIBUTE_TYPE type, uint32 s
 	_usage = usage;
 	_attb_type = type;
 	_active = true;
+	_data_type = dataType;
 }
 
 void glGpuBuffer::readData(uint32 offset, uint32 length, void *pDest)

@@ -6,7 +6,7 @@
 #include "Camera.h"
 #include "GpuBuffer.h"
 struct globalEnvironmentInfo {
-	LightList _lights;
+	LightVec _lights;
 	CamPtr   _cur_cam;
 };
 
@@ -18,7 +18,7 @@ class RenderSystem{
 	virtual void bindMaterial(const Material&) = 0;
 	//Upload different vertex attributes,e.g. Position,Normal,TexCoord to Gpu Buffer.
 	virtual void uploadSubMesh2Gpu(SubMesh&) = 0;
-	virtual void bindSubMesh(const SubMesh&) = 0;
+	virtual void bindSubMesh(SubMesh&) = 0;
 	virtual void createWindow(const string&title, uint width, uint height, bool fullscreen) = 0;
 	virtual GpuBufferPtr createGpuBuffer(BUFFER_USAGE, ATTRIBUTE_TYPE, uint32 size, void* pSource) = 0;
 	virtual void draw() = 0;

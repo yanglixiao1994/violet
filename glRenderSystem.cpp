@@ -5,14 +5,30 @@ void glRenderSystem::setGpuProgram() {
 }
 
 void glRenderSystem::bindGlobalEnvironmentInfo(const globalEnvironmentInfo&geinfo) {
+
+	GLuint campos = glGetUniformLocation(_cur_gpu_program, "camPosition");
+	glUniform3f(campos, geinfo._cur_cam->getPosition()[0], 
+		geinfo._cur_cam->getPosition()[1], geinfo._cur_cam->getPosition()[2]);
+
+	GLuint numLights = glGetUniformLocation(_cur_gpu_program, "numLights");
+	Assert(numLights != -1);
+	glUniform1i(numLights, geinfo._lights.size());
 	int i = 0;
 	for (const auto &curl:geinfo._lights) {
 		if (i >= MAX_LIGHT_NUM)break;
 		else {
-			GLuint li_world = glGetUniformLocation(_cur_gpu_program, "li_world");
-			glUniform3f(li_world, curl->posi.x, curl->posi.y, curl->posi.z);
-			GLuint li_color = glGetUniformLocation(_cur_gpu_program, "li_color");
-			glUniform3f(li_color, curl->color.r, curl->color.g, curl->color.b);
+			ostringstream ss;
+			string uniformName;
+			ss << "Lights[" << i << "].position" << ends;
+			uniformName = ss.str();
+			GLuint lightpos = glGetUniformLocation(_cur_gpu_program, uniformName.c_str());
+			glUniform3fv(lightpos,1,&geinfo._lights[i]->posi[0]);
+			ss.clear();
+			ss << "Lights[" << i << "].color" << ends;
+			uniformName.clear();
+			uniformName = ss.str();
+			GLuint lightcolor = glGetUniformLocation(_cur_gpu_program, uniformName.c_str());
+			glUniform3fv(lightcolor,1, &geinfo._lights[i]->color[0]);
 		}
 		++i;
 	}
@@ -88,9 +104,20 @@ void glRenderSystem::uploadSubMesh2Gpu(SubMesh&submesh) {
 	}
 }
 
-void glRenderSystem::bindSubMesh(const SubMesh&submesh) {
+void glRenderSystem::bindSubMesh(SubMesh&submesh) {
 	if (submesh._num_vertex_attributes != submesh._gpubuffers.size()) {
 		submesh._gpubuffers.clear();
 		Assert(submesh._num_vertex_attributes !=
 			submesh._vertattr1fv.size() + submesh._vertattr2fv.size() + submesh._vertattr3fv.size());
+		uploadSubMesh2Gpu(submesh);
+	}
+	int num_attrib = 0;
+	for (const auto&gbuff : submesh._gpubuffers) {
+		if (gbuff->getAttributeType() == ATTRIBUTE_TYPE::Index) {
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gbuff->getBufferId());
+			glEnableVertexAttribArray(num_attrib);
+			glVertexAttribPointer(num_attrib,gbuff->getSize(),)
+		}
+		glBindBuffer(gbuff->getBufferId)
+	}
 }

@@ -26,38 +26,39 @@ class GpuBuffer {
 public:
 	GpuBuffer():_active(false),_size(0) {};
 	virtual ~GpuBuffer() {};
-	virtual void createBuffer(BUFFER_USAGE, ATTRIBUTE_TYPE, uint32 size, void* pSource) = 0;
-	virtual void readData(uint32 offset,uint32 length,void *pDest) = 0;
-	virtual void writeData(uint32 offset,uint32 length,void *pDest) = 0;
-	virtual void deleteBuffer() = 0;
-	uint32 getSize() {
+	virtual void	createBuffer(BUFFER_USAGE, ATTRIBUTE_TYPE, uint32 dataType,uint32 sizeinBytes, void* pSource) = 0;
+	virtual void	readData(uint32 offset,uint32 length,void *pDest) = 0;
+	virtual void	writeData(uint32 offset,uint32 length,void *pDest) = 0;
+	virtual void	deleteBuffer() = 0;
+	virtual uint32  getDataType() = 0;
+	uint32			getSize() {
 		return _size;
 	}
-	uint32 getBufferId() {
+	uint32			getBufferId() {
 		return _buffer_id;
 	}
-	void setBufferId(uint32 id) {
+	void			setBufferId(uint32 id) {
 		_buffer_id = id;
 	}
-	BUFFER_USAGE getBufferUsage() {
+	BUFFER_USAGE	getBufferUsage() {
 		return _usage;
 	}
-	void setBufferUsage(BUFFER_USAGE usage) {
+	void			setBufferUsage(BUFFER_USAGE usage) {
 		_usage = usage;
 	}
-	ATTRIBUTE_TYPE getAttributeType() {
+	ATTRIBUTE_TYPE  getAttributeType() {
 		return _attb_type;
 	}
-	void setAttributeType(ATTRIBUTE_TYPE attr) {
+	void			setAttributeType(ATTRIBUTE_TYPE attr) {
 		_attb_type = attr;
 	}
-	bool isSystemBuffer() {
+	bool			isSystemBuffer() {
 		return _inSystemBuffer;
 	}
-	bool isVideoBuffer() {
+	bool			isVideoBuffer() {
 		return _inVideoBuffer;
 	}
-	bool isActive() {
+	bool			isActive() {
 		return _active;
 	}
 
@@ -69,16 +70,20 @@ protected:
 	bool			 _inSystemBuffer;
 	bool			 _inVideoBuffer;
 	uint32			 _buffer_id;
+	uint32			 _data_type;
 };
 
-typedef shared_ptr<GpuBuffer> GpuBufferPtr;
-typedef list<GpuBufferPtr> GpuBufferList;
+typedef shared_ptr<GpuBuffer>	GpuBufferPtr;
+typedef list<GpuBufferPtr>		GpuBufferList;
 
 class glGpuBuffer :public GpuBuffer{
 public:
 	virtual ~glGpuBuffer();
-	virtual void createBuffer(BUFFER_USAGE, ATTRIBUTE_TYPE, uint32 size, void* pSource)override final;
+	virtual void createBuffer(BUFFER_USAGE, ATTRIBUTE_TYPE, uint32 dataType,uint32 sizeinBytes, void* pSource)override final;
 	virtual void readData(uint32 offset, uint32 length, void *pDest)override final;
 	virtual void writeData(uint32 offset, uint32 length, void *pDest)override final;
 	virtual void deleteBuffer()override final;
+	virtual uint32 getDataType()override final {
+		return _data_type;
+	}
 };
