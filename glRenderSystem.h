@@ -2,15 +2,17 @@
 #include "RenderSystem.h"
 #define MAX_LIGHT_NUM 8
 class glRenderSystem :public RenderSystem {
-
+public:
+	glRenderSystem() { loadGpuProgram(); }
 	void setGpuProgram()final override;
 	void bindGlobalEnvironmentInfo(const globalEnvironmentInfo&)final override;
-	void bindMaterial(const Material&)final override;
+	void bindMaterial(const MatlPtr&)final override;
 	void uploadSubMesh2Gpu(SubMesh&)final override;
 	void bindSubMesh(SubMesh&)final override;
-	void createWindow(const string&title, uint width, uint height, bool fullscreen)final override;
-	GpuBufferPtr createGpuBuffer(BUFFER_USAGE, ATTRIBUTE_TYPE, uint32 size, void* pSource)final override;
-	void draw()final override;
+	void createWindow(const windowInfo&)final override;
+	GpuBufferPtr createGpuBuffer(BUFFER_USAGE, ATTRIBUTE_TYPE,uint32 size, void* pSource)final override;
+	void draw(SubMesh&)final override;
+	void loadGpuProgram();
 private:
 	uint				_width;
 	uint				_height;

@@ -5,13 +5,14 @@ enum class BUFFER_USAGE {
 	Dynamic
 };
 //Should be arranged in the order of shader.
-enum class ATTRIBUTE_TYPE {
-	Position,
-	Texcoordinate,
-	Normal,
-	VertexColor,
-	Index,
+enum ATTRIBUTE_TYPE {
+	Position = 0x1,
+	Texcoordinate = 0x2,
+	Normal = 0x4,
+	VertexColor = 0x8,
+	Index= 0x10,
 };
+
 //Vertex Attribute
 typedef map<ATTRIBUTE_TYPE, glm::vec3>			VertAttr3f;
 typedef map<ATTRIBUTE_TYPE, vector<glm::vec3>>	VertAttr3fV;
@@ -26,11 +27,10 @@ class GpuBuffer {
 public:
 	GpuBuffer():_active(false),_size(0) {};
 	virtual ~GpuBuffer() {};
-	virtual void	createBuffer(BUFFER_USAGE, ATTRIBUTE_TYPE, uint32 dataType,uint32 sizeinBytes, void* pSource) = 0;
+	virtual void	createBuffer(BUFFER_USAGE, ATTRIBUTE_TYPE,uint32 sizeinBytes, void* pSource) = 0;
 	virtual void	readData(uint32 offset,uint32 length,void *pDest) = 0;
 	virtual void	writeData(uint32 offset,uint32 length,void *pDest) = 0;
 	virtual void	deleteBuffer() = 0;
-	virtual uint32  getDataType() = 0;
 	uint32			getSize() {
 		return _size;
 	}
@@ -70,7 +70,6 @@ protected:
 	bool			 _inSystemBuffer;
 	bool			 _inVideoBuffer;
 	uint32			 _buffer_id;
-	uint32			 _data_type;
 };
 
 typedef shared_ptr<GpuBuffer>	GpuBufferPtr;
@@ -79,11 +78,8 @@ typedef list<GpuBufferPtr>		GpuBufferList;
 class glGpuBuffer :public GpuBuffer{
 public:
 	virtual ~glGpuBuffer();
-	virtual void createBuffer(BUFFER_USAGE, ATTRIBUTE_TYPE, uint32 dataType,uint32 sizeinBytes, void* pSource)override final;
+	virtual void createBuffer(BUFFER_USAGE, ATTRIBUTE_TYPE,uint32 sizeinBytes, void* pSource)override final;
 	virtual void readData(uint32 offset, uint32 length, void *pDest)override final;
 	virtual void writeData(uint32 offset, uint32 length, void *pDest)override final;
 	virtual void deleteBuffer()override final;
-	virtual uint32 getDataType()override final {
-		return _data_type;
-	}
 };

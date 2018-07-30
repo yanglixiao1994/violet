@@ -48,6 +48,7 @@ public:
 		update();
 	}
 	virtual void update() {};
+	virtual bool isInView(const ObjPtr&);
 private:
 	mat4 V;
 	mat4 P;

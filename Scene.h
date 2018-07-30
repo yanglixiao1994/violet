@@ -4,8 +4,8 @@
 #include "Light.h"
 #include "RenderSystem.h"
 
-
 class Scene {
+	typedef ObjList RenderQueue;
 private:
 	Object *		 _root;
 	RenderSystem *	 _render;
@@ -14,9 +14,12 @@ private:
 
 	MatlList	     _matls;
 	ObjList			 _objs;
+	SubMeshList		 _render_list;
 
 public:
-	void insertMatl(const MatlPtr&matl);
+	void insertObj(const ObjPtr &obj,const ObjPtr &father);
 	void loadScene(const string&file) {};
+
+	ObjList getVisibleObject();
 	void draw();
 };

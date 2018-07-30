@@ -1,15 +1,25 @@
 #include "Scene.h"
 //TODO:Optimaize the order
-void Scene::insertMatl(const MatlPtr&matl){
+void Scene::insertObj(const ObjPtr&obj,const ObjPtr&father){
 	//First compare the blend
-	for (auto m = _matls.begin(); m != _matls.end();++m) {
-		if (*matl <= *(*m))
-			_matls.insert(m,matl);
+	father->insertChild(obj);
+	obj->setFather(father);
+}
+
+ObjList Scene::getVisibleObject() {
+	ObjList result;
+	for (auto &obj : _objs) {
+		if (_cur_cam->isInView(obj))
+			result.push_back(obj);
 	}
+	return result;
 }
 
 void Scene::draw() {
-	for (auto&mat : _matls) {
-
+	ObjList visiableList = getVisibleObject();
+	SubMeshList renderList;
+	for (const auto&obj : renderList) {
+		renderList.push_back(obj);
 	}
+	renderList.sort();
 }

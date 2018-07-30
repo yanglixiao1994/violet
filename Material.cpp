@@ -17,7 +17,7 @@ Material::Material(
 	MATL_SPECULAR_MODEL spm = { MATL_SPECULAR_MODEL::Phong },
 	bool cullface = { true },
 	bool depthtest = { false },
-	const string&gpu_program = { "Opaque_Phong_Lambert_Phong" }
+	const string&gpu_program = { "Phong" }
 ) :_blend{ bm }, _shading{ sm }, _diffuse{ dm }, _specular{ spm }, _cullface{ cullface }, _depthtest{ depthtest } {};
 
 bool Material::operator <= (const Material&m)const {

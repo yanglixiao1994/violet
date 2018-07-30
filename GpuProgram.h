@@ -6,8 +6,10 @@ public:
 	GLuint id;
 	void loadShaders(const string&vShaderPath, const string&fShaderPath);
 private:
+	void checkCompileErrors(uint32 shader, string type);
+
 	string vertexShaderFile;
 	string fragmentShaderFile;
-	string vertexShaderCode;
-	string fragmentShaderCode;
+	string vertexCode;
+	string fragmentCode;
 };

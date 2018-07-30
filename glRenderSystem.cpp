@@ -1,4 +1,11 @@
 #include "glRenderSystem.h"
+
+void glRenderSystem::loadGpuProgram() {
+	GpuProgram gprogram;
+	gprogram.loadShaders("phong.vertex", "phong.fragment");
+	_gpu_program_cache.insert(pair<string, GLuint>("phong", gprogram.id));
+}
+
 void glRenderSystem::setGpuProgram() {
 	_cur_gpu_program = _gpu_program_cache[(*_cur_matl).getGpuProgramName()];
 	glUseProgram(_cur_gpu_program);
@@ -38,21 +45,28 @@ void glRenderSystem::bindGlobalEnvironmentInfo(const globalEnvironmentInfo&geinf
 	glUniformMatrix4fv(P, 1, GL_FALSE, &geinfo._cur_cam->getProjMat()[0][0]);
 }
 
-void glRenderSystem::bindMaterial(const Material&mat) {
-	for (const auto &para3 : mat._param1fv) {
+void glRenderSystem::bindMaterial(const MatlPtr&mat) {
+	for (const auto &para3 : mat->_param1fv) {
 		GLuint paramid = glGetUniformLocation(_cur_gpu_program, para3.first.c_str());
 		glUniform3f(paramid, para3.second.x, para3.second.y, para3.second.z);
 	}
 
-	for (const auto &para2 : mat._param2fv) {
+	for (const auto &para2 : mat->_param2fv) {
 		GLuint paramid = glGetUniformLocation(_cur_gpu_program, para2.first.c_str());
 		glUniform2f(paramid, para2.second.x, para2.second.y);
 	}
 
-	for (const auto &para1 : mat._param1fv) {
+	for (const auto &para1 : mat->_param1fv) {
 		GLuint paramid = glGetUniformLocation(_cur_gpu_program, para1.first.c_str());
 		glUniform1f(paramid, para1.second);
 	}
+	if (mat->_cullface)
+		glEnable(GL_CULL_FACE);
+	else glDisable(GL_CULL_FACE);
+	if (mat->_depthtest)
+		glEnable(GL_DEPTH_TEST);
+	else glDisable(GL_DEPTH_TEST);
+	_cur_matl = mat;
 }
 
 GpuBufferPtr glRenderSystem::createGpuBuffer(BUFFER_USAGE usage, ATTRIBUTE_TYPE type, uint32 size, void* pSource) {
@@ -88,7 +102,7 @@ void glRenderSystem::uploadSubMesh2Gpu(SubMesh&submesh) {
 			submesh._vertattr1fv.size() + submesh._vertattr2fv.size() + submesh._vertattr3fv.size());
 		for (const auto&p3:submesh._vertattr3fv) {
 			glGpuBuffer gbuff;
-			gbuff.createBuffer(BUFFER_USAGE::Static, p3.first, 
+			gbuff.createBuffer(BUFFER_USAGE::Static,p3.first,
 				p3.second.size() * sizeof(vec3), (void*)&(p3.second[0][0]));
 		}
 		for (const auto&p2 : submesh._vertattr2fv) {
@@ -116,8 +130,44 @@ void glRenderSystem::bindSubMesh(SubMesh&submesh) {
 		if (gbuff->getAttributeType() == ATTRIBUTE_TYPE::Index) {
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gbuff->getBufferId());
 			glEnableVertexAttribArray(num_attrib);
-			glVertexAttribPointer(num_attrib,gbuff->getSize(),)
+			glVertexAttribPointer(num_attrib, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
 		}
-		glBindBuffer(gbuff->getBufferId)
+		else if (gbuff->getAttributeType() == (ATTRIBUTE_TYPE::Normal || ATTRIBUTE_TYPE::Position || ATTRIBUTE_TYPE::VertexColor)) {
+			glBindBuffer(GL_ARRAY_BUFFER, gbuff->getBufferId());
+			glEnableVertexAttribArray(num_attrib);
+			glVertexAttribPointer(num_attrib, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		}
+		else if(gbuff->getAttributeType() == ATTRIBUTE_TYPE::Texcoordinate) {
+			glBindBuffer(GL_ARRAY_BUFFER, gbuff->getBufferId());
+			glEnableVertexAttribArray(num_attrib);
+			glVertexAttribPointer(num_attrib, gbuff->getSize() * 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+		}
 	}
+}
+
+void glRenderSystem::createWindow(const windowInfo&wi) {
+	Assert(glfwInit());
+	glfwWindowHint(GLFW_SAMPLES, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	window = glfwCreateWindow(wi._width, wi._height, (wi._title).c_str(), NULL, NULL);
+
+	Assert(window);
+	glfwMakeContextCurrent(window);
+	glewExperimental = GL_TRUE;
+
+	Assert(glewInit() == GLEW_OK);
+	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+	glClearColor(0.f, 0.f, .4f, 0.f);
+
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	glDepthFunc(GL_LESS);
+}
+
+void glRenderSystem::draw(SubMesh&mesh) {
+	if (!mesh._isInGpu)uploadSubMesh2Gpu(mesh);
+	bindSubMesh(mesh);
+	bindMaterial(mesh._matl);
+	setGpuProgram();
 }

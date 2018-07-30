@@ -60,3 +60,7 @@ void Camera::update() {
 	}
 }
 
+//TODO:Using a space management structure.
+bool Camera::isInView(const ObjPtr&obj) {
+	return true;
+}
