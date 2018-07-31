@@ -42,6 +42,7 @@ set(ALL_LIBS
 add_executable(
 	violet
 	source/auxiliary.h
+	source/auxiliary.cpp
 	source/Camera.cpp
 	source/Camera.h
 	source/Light.cpp

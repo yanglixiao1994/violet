@@ -12,26 +12,43 @@
 #include <memory>
 #include <fstream>
 #include <sstream>
+#include <initializer_list>
 using namespace std;
+namespace violet {
 
-#define WINDOW_HEIGHT 1024
-#define WINDOW_WIDTH 768
+	typedef unsigned int uint32;
+	typedef unsigned long uint64;
+	typedef unsigned short uint16;
+	typedef unsigned char uint8;
 
-typedef unsigned int uint32;
-typedef unsigned long uint64;
-typedef unsigned short uint16;
-typedef unsigned char uint8;
-
-
+#define WINDOW_WIDTH 1024
+#define WINDOW_HEIGHT 768
 
 #ifdef NDEBUG
 #define Assert(expr) expr
 #else
 #define Assert(expr) assert(expr)
 #endif
-static double start_time = glfwGetTime();
-GLFWwindow* window;
-//Get the last time of the Application
-double getTime() {
-	return glfwGetTime() - start_time;
+	extern GLFWwindow* window;
+	//Get the last time of the Application
+	double getTime();
+
+	template<typename Enum>
+	Enum operator |(Enum lhs, Enum rhs) {
+		static_assert(std::is_enum<Enum>::value, "template parameter is not an enum type");
+		using underlying = typename std::underlying_type<Enum>::type;
+		return static_cast<Enum>(
+			static_cast<underlying>(lhs) |
+			static_cast<underlying>(rhs)
+			);
+	}
+
+	template<typename T>
+	bool is_in(const T&t, const std::initializer_list<T>&list) {
+		for (const auto &tt : list) {
+			if (tt == t)return true;
+		}
+		return false;
+	}
+
 }
