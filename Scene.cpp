@@ -17,11 +17,20 @@ namespace violet {
 	}
 
 	void Scene::draw() {
-		ObjList visiableList = getVisibleObject();
-		SubMeshList renderList;
-		for (const auto&obj : renderList) {
-			renderList.push_back(obj);
+
+		for (;;) {
+			float tmp = rand() % 10;
+			_render->setColor(tmp / 10.f, 1.f, 0.f);
+			_render->swapBuffer();
+
+
+			glClear(GL_COLOR_BUFFER_BIT);
+			ObjList visiableList = getVisibleObject();
+			SubMeshList renderList;
+			for (const auto&obj : renderList) {
+				renderList.push_back(obj);
+			}
+			renderList.sort();
 		}
-		renderList.sort();
 	}
 }

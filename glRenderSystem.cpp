@@ -1,5 +1,28 @@
 #include "glRenderSystem.h"
 namespace violet {
+
+	glRenderSystem::glRenderSystem(const windowInfo&wi) {
+		Assert(glfwInit());
+		glfwWindowHint(GLFW_SAMPLES, 4);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		window = glfwCreateWindow(wi._width, wi._height, wi._title.c_str(), NULL, NULL);
+		
+		Assert(window);
+		glfwMakeContextCurrent(window);
+		glewExperimental = GL_TRUE;
+		
+		Assert(glewInit() == GLEW_OK);
+		glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
+		glClearColor(0.f, 0.f, .4f, 0.f);
+		
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LESS);
+		glEnable(GL_CULL_FACE);
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	}
+
 	void glRenderSystem::loadGpuProgram() {
 		GpuProgram gprogram;
 		gprogram.loadShaders("phong.vertex", "phong.fragment");
@@ -146,30 +169,18 @@ namespace violet {
 		}
 	}
 
-	void glRenderSystem::createWindow(const windowInfo&wi) {
-		Assert(glfwInit());
-		glfwWindowHint(GLFW_SAMPLES, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-		window = glfwCreateWindow(wi._width, wi._height, (wi._title).c_str(), NULL, NULL);
-
-		Assert(window);
-		glfwMakeContextCurrent(window);
-		glewExperimental = GL_TRUE;
-
-		Assert(glewInit() == GLEW_OK);
-		glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-		glClearColor(0.f, 0.f, .4f, 0.f);
-
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-		glDepthFunc(GL_LESS);
-	}
-
 	void glRenderSystem::draw(SubMesh&mesh) {
 		if (!mesh._isInGpu)uploadSubMesh2Gpu(mesh);
 		bindSubMesh(mesh);
 		bindMaterial(mesh._matl);
 		setGpuProgram();
+	}
+
+	void glRenderSystem::swapBuffer() {
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	}
+	void glRenderSystem::setColor(float r, float g, float b) {
+		glClearColor(r, g, b, 1);
 	}
 }

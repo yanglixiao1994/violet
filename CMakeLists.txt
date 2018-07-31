@@ -62,6 +62,7 @@ add_executable(
 	source/Material.cpp
 	source/Mesh.h
 	source/Mesh.cpp
+	source/main.cpp
 	source/GpuBuffer.h
 	source/GpuBuffer.cpp
 	source/phong.vertex

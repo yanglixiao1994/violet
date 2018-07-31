@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <iostream>
 #include <memory>
+#include <math.h>
 #include <fstream>
 #include <sstream>
 #include <initializer_list>

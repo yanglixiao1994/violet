@@ -4,15 +4,16 @@
 namespace violet {
 	class glRenderSystem :public RenderSystem {
 	public:
-		glRenderSystem() { loadGpuProgram(); }
+		glRenderSystem(const windowInfo&);
 		void setGpuProgram()final override;
 		void bindGlobalEnvironmentInfo(const globalEnvironmentInfo&)final override;
 		void bindMaterial(const MatlPtr&)final override;
 		void uploadSubMesh2Gpu(SubMesh&)final override;
 		void bindSubMesh(SubMesh&)final override;
-		void createWindow(const windowInfo&)final override;
 		GpuBufferPtr createGpuBuffer(BUFFER_USAGE, ATTRIBUTE_TYPE, uint32 size, void* pSource)final override;
 		void draw(SubMesh&)final override;
+		void swapBuffer()final override;
+		void setColor(float r, float g, float b);
 		void loadGpuProgram();
 	private:
 		uint				_width;
