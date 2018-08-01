@@ -9,15 +9,15 @@ namespace violet {
 		double currentTime = glfwGetTime();
 		float deltaTime = float(currentTime - lastTime);
 		lastTime = currentTime;
-		switch (ctr) {
+		switch (_ctr) {
 		case CAM_CONTROL_TYPE::FIRST_PERSON: {
 			double xpos, ypos;
 			glfwGetCursorPos(window, &xpos, &ypos);
 			glfwSetCursorPos(window, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
 			// Compute new orientation
-			horizontalAngle += rotate_speed * float(WINDOW_WIDTH / 2 - xpos);
-			verticalAngle += rotate_speed * float(WINDOW_HEIGHT / 2 - ypos);
+			horizontalAngle += _rotate_speed * float(WINDOW_WIDTH / 2 - xpos);
+			verticalAngle += _rotate_speed * float(WINDOW_HEIGHT / 2 - ypos);
 
 			// Direction : Spherical coordinates to Cartesian coordinates conversion
 			glm::vec3 direction(
@@ -37,21 +37,21 @@ namespace violet {
 			glm::vec3 up = glm::cross(right, direction);
 
 			if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-				_posi += direction * deltaTime * move_speed;
+				_posi += direction * deltaTime * _move_speed;
 			}
 			if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-				_posi -= direction * deltaTime * move_speed;
+				_posi -= direction * deltaTime * _move_speed;
 			}
 			if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-				_posi += right * deltaTime * move_speed;
+				_posi += right * deltaTime * _move_speed;
 			}
 
 			if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-				_posi -= right * deltaTime * move_speed;
+				_posi -= right * deltaTime * _move_speed;
 			}
 
-			P = glm::perspective(glm::radians(FOV), aspect, near, far);
-			V = glm::lookAt(
+			_P = glm::perspective(glm::radians(_FOV), _aspect, _near, _far);
+			_V = glm::lookAt(
 				_posi,
 				_posi + direction,
 				up
@@ -60,7 +60,9 @@ namespace violet {
 		}
 		}
 	}
-
+	string Camera::getName() {
+		return _name;
+	}
 	//TODO:Using a space management structure.
 	bool Camera::isInView(const ObjPtr&obj) {
 		return true;

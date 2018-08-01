@@ -24,12 +24,12 @@ out vec2 uv_fragment;
 void main()
 {
 	for(int i = 0;i < numlights;i++){
-		lidir_world[i] = normalize(Lights[i].position - position);
+		lidir_world[i] = normalize(Lights[i].position - position).xyz;
 	}
 	normal_world     = normalize(M * vec4(normal,1)).xyz;
 	eyedir_world     = normalize(camPosition - position).xyz;
 	uv_fragment      = uv; 
-	gl_Position      = (MVP * vec4(position,1)).xyz;
+	gl_Position      = MVP * vec4(position,1);
 }
 
 

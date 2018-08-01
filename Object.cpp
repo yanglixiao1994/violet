@@ -20,12 +20,6 @@ namespace violet {
 		);
 	}
 
-	void Object::update() {
-		if (_parent.get() == nullptr) {
-
-		}
-	}
-
 	mat4 Object::getToWorldMat() {
 		if(_parent)
 			return _parent->getToWorldMat() * localToParent();

@@ -6,7 +6,8 @@ namespace violet {
 	class Object;
 	typedef shared_ptr<Object>  ObjPtr;
 	typedef list<ObjPtr> ObjList;
-	class Object {
+	class Object:enable_shared_from_this<Object> {
+		friend class Scene;
 	protected:
 		//The relative information
 		vec3		 _posi;
@@ -17,15 +18,28 @@ namespace violet {
 		list<ObjPtr> _childs;
 		ObjPtr       _parent;
 
-		Mesh         *_mesh;
+		MeshPtr      _mesh;
 
 		bool		 _dirty;
 		bool		 _visible;
 		bool		 _shadow;
-		mat4		localToParent();
-		//mat4 parentToLocal();
+		mat4		 localToParent();
+		void setParent(const ObjPtr&obj) {
+			_parent = obj;
+		}
 
+		void insertChild(const ObjPtr&obj) {
+			_childs.push_back(obj);
+			obj->setParent(shared_from_this());
+		}
 	public:
+
+		void loadMesh(const string&file) {
+			if (_mesh.get())_mesh->clear();
+			else _mesh = MeshPtr(new Mesh());
+			_mesh->loadMesh(file);
+		}
+
 		vec3 getPosition() {
 			return _posi;
 		}
@@ -55,15 +69,11 @@ namespace violet {
 			}
 		}
 
-		void setParent(const ObjPtr&obj) {
-			_parent = obj;
+		SubMeshVec getSubMesh() {
+			return _mesh->getSubMesh();
 		}
-		void insertChild(const ObjPtr&obj) {
-			_childs.push_back(obj);
-		}
-
 		mat4 getToWorldMat();
-		virtual void update();
+		//virtual void update();
 
 		Object(
 			const vec3&posi = vec3{ 0,0,0 },

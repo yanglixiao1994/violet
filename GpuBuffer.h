@@ -74,7 +74,7 @@ namespace violet {
 		uint32			 _buffer_id;
 	};
 
-	typedef shared_ptr<GpuBuffer>	GpuBufferPtr;
+	typedef unique_ptr<GpuBuffer>	GpuBufferPtr;
 	typedef list<GpuBufferPtr>		GpuBufferList;
 
 	class glGpuBuffer :public GpuBuffer {

@@ -7,23 +7,28 @@ namespace violet {
 	class Scene {
 		typedef ObjList RenderQueue;
 	private:
-		Object * _root;
+		ObjPtr		  	 _root;
 		RenderSystem *	 _render;
 
 		CamPtr			 _cur_cam;
+		CamList			 _camList;
+		LightVec		 _lightVec;
 
 		MatlList	     _matls;
-		ObjList			 _objs;
-		SubMeshList		 _render_list;
+		SubMeshList		 _renderList;
 
 	public:
-		void insertObj(const ObjPtr &obj, const ObjPtr &father);
-		void loadScene(const string&file) {};
-		void setRender(RenderSystem*rs) {
+		Scene();
+		void	loadScene(const string&file) {};
+		void	setRender(RenderSystem*rs) {
 			_render = rs;
 		}
-
+		ObjPtr  getRoot() {
+			return _root;
+		}
 		ObjList getVisibleObject();
-		void draw();
+		void	setCurCam(const string&);
+		void	insert(ObjPtr&obj, ObjPtr&parent);
+		void	draw();
 	};
 }

@@ -21,6 +21,7 @@ namespace violet {
 		glDepthFunc(GL_LESS);
 		glEnable(GL_CULL_FACE);
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+		loadGpuProgram();
 	}
 
 	void glRenderSystem::loadGpuProgram() {
@@ -90,6 +91,7 @@ namespace violet {
 			glEnable(GL_DEPTH_TEST);
 		else glDisable(GL_DEPTH_TEST);
 		_cur_matl = mat;
+		setGpuProgram();
 	}
 
 	GpuBufferPtr glRenderSystem::createGpuBuffer(BUFFER_USAGE usage, ATTRIBUTE_TYPE type, uint32 size, void* pSource) {
@@ -119,42 +121,51 @@ namespace violet {
 		return gbuf;
 	}
 
-	void glRenderSystem::uploadSubMesh2Gpu(SubMesh&submesh) {
-		if (submesh._num_vertex_attributes != submesh._gpubuffers.size()) {
-			submesh._gpubuffers.clear();
-			Assert(submesh._num_vertex_attributes !=
-				submesh._vertattr1fv.size() + submesh._vertattr2fv.size() + submesh._vertattr3fv.size());
-			for (const auto&p3 : submesh._vertattr3fv) {
-				glGpuBuffer gbuff;
-				gbuff.createBuffer(BUFFER_USAGE::Static, p3.first,
+	void glRenderSystem::uploadSubMesh2Gpu(const SubMeshPtr&submesh) {
+		if (submesh->_num_vertex_attributes != submesh->_gpubuffers.size()) {
+			submesh->_gpubuffers.clear();
+			Assert(submesh->_num_vertex_attributes ==
+				submesh->_vertattr1fv.size() + submesh->_vertattr2fv.size() + submesh->_vertattr3fv.size() + submesh->_vertattr1iv.size());
+			for (const auto&p3 : submesh->_vertattr3fv) {
+				GpuBufferPtr gbuff = make_unique<glGpuBuffer>();
+				gbuff->createBuffer(BUFFER_USAGE::Static, p3.first,
 					p3.second.size() * sizeof(vec3), (void*)&(p3.second[0][0]));
+				submesh->_gpubuffers.push_back(std::move(gbuff));
 			}
-			for (const auto&p2 : submesh._vertattr2fv) {
-				glGpuBuffer gbuff;
-				gbuff.createBuffer(BUFFER_USAGE::Static, p2.first,
+			for (const auto&p2 : submesh->_vertattr2fv) {
+				GpuBufferPtr gbuff = make_unique<glGpuBuffer>();
+				gbuff->createBuffer(BUFFER_USAGE::Static, p2.first,
 					p2.second.size() * sizeof(vec2), (void*)&(p2.second[0][0]));
+				submesh->_gpubuffers.push_back(std::move(gbuff));
 			}
-			for (const auto&p1 : submesh._vertattr1fv) {
-				glGpuBuffer gbuff;
-				gbuff.createBuffer(BUFFER_USAGE::Static, p1.first,
+			for (const auto&p1 : submesh->_vertattr1fv) {
+				GpuBufferPtr gbuff = make_unique<glGpuBuffer>();
+				gbuff->createBuffer(BUFFER_USAGE::Static, p1.first,
 					p1.second.size() * sizeof(float), (void*)&(p1));
+				submesh->_gpubuffers.push_back(std::move(gbuff));
+			}
+			for (const auto&p1i : submesh->_vertattr1iv) {
+				GpuBufferPtr gbuff = make_unique<glGpuBuffer>();
+				gbuff->createBuffer(BUFFER_USAGE::Static, p1i.first,
+					p1i.second.size() * sizeof(int), (void*)&(p1i));
+				submesh->_gpubuffers.push_back(std::move(gbuff));
 			}
 		}
 	}
 
-	void glRenderSystem::bindSubMesh(SubMesh&submesh) {
-		if (submesh._num_vertex_attributes != submesh._gpubuffers.size()) {
-			submesh._gpubuffers.clear();
-			Assert(submesh._num_vertex_attributes !=
-				submesh._vertattr1fv.size() + submesh._vertattr2fv.size() + submesh._vertattr3fv.size());
+	void glRenderSystem::bindSubMesh(const SubMeshPtr&submesh) {
+		if (submesh->_num_vertex_attributes != submesh->_gpubuffers.size()) {
+			submesh->_gpubuffers.clear();
+			Assert(submesh->_num_vertex_attributes !=
+				submesh->_vertattr1fv.size() + submesh->_vertattr2fv.size() + submesh->_vertattr3fv.size());
 			uploadSubMesh2Gpu(submesh);
 		}
 		int num_attrib = 0;
-		for (const auto&gbuff : submesh._gpubuffers) {
+		for (const auto&gbuff : submesh->_gpubuffers) {
 			if (gbuff->getAttributeType() == ATTRIBUTE_TYPE::Index) {
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gbuff->getBufferId());
 				glEnableVertexAttribArray(num_attrib);
-				glVertexAttribPointer(num_attrib, 1, GL_FLOAT, GL_FALSE, 0, (void*)0);
+				glVertexAttribPointer(num_attrib, 1, GL_INT, GL_FALSE, 0, (void*)0);
 			}
 			else if (is_in(gbuff->getAttributeType(), { ATTRIBUTE_TYPE::Normal,ATTRIBUTE_TYPE::Position,ATTRIBUTE_TYPE::VertexColor })) {
 				glBindBuffer(GL_ARRAY_BUFFER, gbuff->getBufferId());
@@ -164,23 +175,27 @@ namespace violet {
 			else if (gbuff->getAttributeType() == ATTRIBUTE_TYPE::Texcoordinate) {
 				glBindBuffer(GL_ARRAY_BUFFER, gbuff->getBufferId());
 				glEnableVertexAttribArray(num_attrib);
-				glVertexAttribPointer(num_attrib, gbuff->getSize() * 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+				glVertexAttribPointer(num_attrib, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
 			}
+			++num_attrib;
 		}
 	}
 
-	void glRenderSystem::draw(SubMesh&mesh) {
-		if (!mesh._isInGpu)uploadSubMesh2Gpu(mesh);
+	void glRenderSystem::draw(const SubMeshPtr&mesh) {
+		if (!mesh->_isInGpu)uploadSubMesh2Gpu(mesh);
 		bindSubMesh(mesh);
-		bindMaterial(mesh._matl);
+		bindMaterial(mesh->_matl);
 		setGpuProgram();
+		glDrawElements(GL_TRIANGLE_STRIP, mesh->_vertattr1iv[ATTRIBUTE_TYPE::Index].size(), GL_INT, (void*)0);
 	}
 
 	void glRenderSystem::swapBuffer() {
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+
 	void glRenderSystem::setColor(float r, float g, float b) {
 		glClearColor(r, g, b, 1);
 	}
+
 }

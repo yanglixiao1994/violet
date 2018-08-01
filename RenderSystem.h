@@ -19,7 +19,9 @@ namespace violet {
 		windowInfo(const string&title, uint32 width, uint32 height, bool fullscreen) :
 			_title(title), _width(width), _height(height), _fullscreen(fullscreen) {};
 	};
-
+	/*
+	A Scene may have many cameras,but a render system can only have one.
+	*/
 	class RenderSystem {
 	public:
 		virtual void setGpuProgram() = 0;
@@ -28,10 +30,10 @@ namespace violet {
 		//Different materials have different "BRDF",texture,etc.
 		virtual void bindMaterial(const MatlPtr&) = 0;
 		//Upload different vertex attributes,e.g. Position,Normal,TexCoord to Gpu Buffer.
-		virtual void uploadSubMesh2Gpu(SubMesh&) = 0;
-		virtual void bindSubMesh(SubMesh&) = 0;
+		virtual void uploadSubMesh2Gpu(const SubMeshPtr&) = 0;
+		virtual void bindSubMesh(const SubMeshPtr&) = 0;
 		virtual GpuBufferPtr createGpuBuffer(BUFFER_USAGE, ATTRIBUTE_TYPE, uint32 size, void* pSource) = 0;
-		virtual void draw(SubMesh&) = 0;
+		virtual void draw(const SubMeshPtr&) = 0;
 		virtual void swapBuffer() = 0;
 		virtual void setColor(float r, float g, float b) = 0;
 	};

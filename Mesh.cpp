@@ -46,7 +46,7 @@ namespace violet {
 				auto face = mesh->mFaces[j];
 				Assert(face.mNumIndices == 3);
 				for (int k = 0; k < 3; k++) {
-					sm->_vertattr1fv[ATTRIBUTE_TYPE::Index].push_back(face.mIndices[k]);
+					sm->_vertattr1iv[ATTRIBUTE_TYPE::Index].push_back(face.mIndices[k]);
 				}
 			}
 			//Load Material
@@ -70,6 +70,11 @@ namespace violet {
 			sm->_matl = matlp;
 			_submeshs.push_back(sm);
 		}
+		_file = file;
+	}
+
+	void Mesh::clear() {
+		_submeshs.clear();
 	}
 
 	bool SubMesh::operator <=(const SubMesh&submesh)const {

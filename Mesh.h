@@ -33,8 +33,17 @@ namespace violet {
 	class Mesh {
 	public:
 		Mesh() {};
+		Mesh(const string&file) {
+			loadMesh(file);
+		}
 		void loadMesh(const string&);
+		void clear();
+		SubMeshVec getSubMesh() {
+			return _submeshs;
+		}
 	private:
 		SubMeshVec	_submeshs;
+		string      _file;
 	};
+	using MeshPtr = unique_ptr<Mesh>;
 }

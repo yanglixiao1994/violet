@@ -18,9 +18,11 @@ namespace violet {
 		switch (usage) {
 		case BUFFER_USAGE::Static: {
 			gl_usage = GL_STATIC_DRAW;
+			break;
 		}
 		case BUFFER_USAGE::Dynamic: {
 			gl_usage = GL_DYNAMIC_DRAW;
+			break;
 		}
 		}
 		if (type == ATTRIBUTE_TYPE::Index) {

@@ -17,7 +17,7 @@ in vec2 uv_fragment;
 out vec3 color;
 void main()
 {
-	vec3 diff;
+	vec3 diff,spec;
 	for(int i = 0;i < numlights;i++){
 		//diffuse    = li_color[i] * (1 - K) * dot(N,L)
 		float fac    = clamp(dot(normal_world,lidir_world[i]),0,1);
@@ -26,10 +26,10 @@ void main()
 		//specular   = li_color[i] * K * pow(max(0,dot(R,V)),gloss)
 		vec3 R	     = normalize(reflect(eyedir_world,normal_world));
 		float fac_   = pow(max(0,dot(R,eyedir_world)),gloss);
-		vec3 spec    = K * fac_ * li_color[i] ;
+		spec    = K * fac_ * li_color[i] ;
 	}
 	//texture
-	vec3 tex	 = texture(tex[0],uv_fragment);
+	vec3 tex	 = texture(tex[0],uv_fragment).rgb;
 
 	//final color
 	color		 = (diff + spec + ambient) * tex;
