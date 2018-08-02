@@ -7,6 +7,7 @@ namespace violet {
 		vec3 getColor() {
 			return _color;
 		}
+		Light(const vec3&posi):Object(posi){}
 	private:
 		vec3 _color;
 	};

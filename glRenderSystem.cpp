@@ -1,7 +1,7 @@
 #include "glRenderSystem.h"
 namespace violet {
 
-	glRenderSystem::glRenderSystem(const windowInfo&wi) {
+	glRenderSystem::glRenderSystem(const WindowInfo&wi) {
 		Assert(glfwInit());
 		glfwWindowHint(GLFW_SAMPLES, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -35,13 +35,13 @@ namespace violet {
 		glUseProgram(_cur_gpu_program);
 	}
 
-	void glRenderSystem::bindGlobalEnvironmentInfo(const globalEnvironmentInfo&geinfo) {
+	void glRenderSystem::bindGlobalEnvironmentInfo(const GlobalEnvironmentInfo&geinfo) {
 
 		GLuint campos = glGetUniformLocation(_cur_gpu_program, "camPosition");
 		glUniform3f(campos, geinfo._cur_cam->getPosition()[0],
 			geinfo._cur_cam->getPosition()[1], geinfo._cur_cam->getPosition()[2]);
 
-		GLuint numLights = glGetUniformLocation(_cur_gpu_program, "numLights");
+		GLuint numLights = glGetUniformLocation(_cur_gpu_program, "numlights");
 		Assert(numLights != -1);
 		glUniform1i(numLights, geinfo._lights.size());
 		int i = 0;
@@ -50,15 +50,19 @@ namespace violet {
 			else {
 				ostringstream ss;
 				string uniformName;
+
 				ss << "Lights[" << i << "].position" << ends;
 				uniformName = ss.str();
 				GLuint lightpos = glGetUniformLocation(_cur_gpu_program, uniformName.c_str());
+				Assert(lightpos != -1);
 				glUniform3fv(lightpos, 1, &geinfo._lights[i]->getPosition()[0]);
+
 				ss.clear();
+				ss.str("");
 				ss << "Lights[" << i << "].color" << ends;
-				uniformName.clear();
 				uniformName = ss.str();
 				GLuint lightcolor = glGetUniformLocation(_cur_gpu_program, uniformName.c_str());
+				Assert(lightcolor != -1);
 				glUniform3fv(lightcolor, 1, &geinfo._lights[i]->getColor()[0]);
 			}
 			++i;
@@ -94,6 +98,11 @@ namespace violet {
 		setGpuProgram();
 	}
 
+	void glRenderSystem::bindObject(const ObjPtr&obj) {
+		GLuint M = glGetUniformLocation(_cur_gpu_program, "M");
+		glUniformMatrix4fv(M, 1, GL_FALSE, &obj->getToWorldMat()[0][0]);
+	}
+
 	GpuBufferPtr glRenderSystem::createGpuBuffer(BUFFER_USAGE usage, ATTRIBUTE_TYPE type, uint32 size, void* pSource) {
 		GpuBufferPtr gbuf(new glGpuBuffer{});
 		//if (gbuf->_active)return;
@@ -122,7 +131,7 @@ namespace violet {
 	}
 
 	void glRenderSystem::uploadSubMesh2Gpu(const SubMeshPtr&submesh) {
-		if (submesh->_num_vertex_attributes != submesh->_gpubuffers.size()) {
+		if (!isInGpu(submesh)) {
 			submesh->_gpubuffers.clear();
 			Assert(submesh->_num_vertex_attributes ==
 				submesh->_vertattr1fv.size() + submesh->_vertattr2fv.size() + submesh->_vertattr3fv.size() + submesh->_vertattr1iv.size());
@@ -154,7 +163,7 @@ namespace violet {
 	}
 
 	void glRenderSystem::bindSubMesh(const SubMeshPtr&submesh) {
-		if (submesh->_num_vertex_attributes != submesh->_gpubuffers.size()) {
+		if (!isInGpu(submesh)) {
 			submesh->_gpubuffers.clear();
 			Assert(submesh->_num_vertex_attributes !=
 				submesh->_vertattr1fv.size() + submesh->_vertattr2fv.size() + submesh->_vertattr3fv.size());
@@ -182,10 +191,6 @@ namespace violet {
 	}
 
 	void glRenderSystem::draw(const SubMeshPtr&mesh) {
-		if (!mesh->_isInGpu)uploadSubMesh2Gpu(mesh);
-		bindSubMesh(mesh);
-		bindMaterial(mesh->_matl);
-		setGpuProgram();
 		glDrawElements(GL_TRIANGLE_STRIP, mesh->_vertattr1iv[ATTRIBUTE_TYPE::Index].size(), GL_INT, (void*)0);
 	}
 
@@ -196,6 +201,12 @@ namespace violet {
 
 	void glRenderSystem::setColor(float r, float g, float b) {
 		glClearColor(r, g, b, 1);
+	}
+
+	bool glRenderSystem::isInGpu(const SubMeshPtr&submesh) {
+		if (submesh->_num_vertex_attributes != submesh->_gpubuffers.size())
+			return false;
+		else return true;
 	}
 
 }

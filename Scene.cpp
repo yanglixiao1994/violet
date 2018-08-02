@@ -20,7 +20,7 @@ namespace violet {
 		temp.push(_root);
 		for (;temp.size()!=0;) {
 			ObjPtr curobj = temp.front();
-			if (_cur_cam->isInView(curobj))
+			if (_cur_cam->isInView(curobj) && curobj->_mesh.get() != nullptr)
 				result.push_back(curobj);
 			for (const auto&child : curobj->_childs) {
 				temp.push(child);
@@ -47,22 +47,32 @@ namespace violet {
 
 	void Scene::draw() {
 		_render->setColor(0, 0, 1);
-		SubMeshVec renderVec;
+		RenderQueue renderq;
 		for (;;) {
 			glClear(GL_COLOR_BUFFER_BIT);
-			globalEnvironmentInfo info;
-			info._cur_cam = _cur_cam;
-			info._lights = _lightVec;
-			_render->bindGlobalEnvironmentInfo(info);
 			ObjList visiableList = getVisibleObject();
+			renderq.clear();
 			for (const auto&obj : visiableList) {
 				SubMeshVec smv = obj->getSubMesh();
-				for(const auto&submesh:smv)
-					renderVec.push_back(submesh);
+				RenderUnit unit;
+				unit._object = obj;
+				for (const auto&submesh : smv) {
+					unit._submesh = submesh;
+					renderq.push_back(unit);
+				}
 			}
 			//renderVec.sort();
-			for (const auto&submesh : renderVec) {
-				_render->draw(submesh);
+			for (const auto&unit : renderq) {
+				if (!_render->isInGpu(unit._submesh))_render->uploadSubMesh2Gpu(unit._submesh);
+				_render->bindSubMesh(unit._submesh);
+				_render->bindMaterial(unit._submesh->_matl);
+				_render->bindObject(unit._object);
+				//TODO:use uniform_buffer.
+				GlobalEnvironmentInfo info;
+				info._cur_cam = _cur_cam;
+				info._lights = _lightVec;
+				_render->bindGlobalEnvironmentInfo(info);
+				_render->draw(unit._submesh);
 			}
 			_render->swapBuffer();
 		}

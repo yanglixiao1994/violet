@@ -63,6 +63,14 @@ namespace violet {
 			scene->mMaterials[mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_AMBIENT, emissive);
 			matlp->insertParam3f("emissive", glm::vec3{ emissive.r,emissive.g,emissive.b });
 
+			matlp->setBlendModel(MATL_BLEND_MODEL::Opaque);
+			matlp->setCullFace(true);
+			matlp->setDepthTest(true);
+			matlp->setDiffuseModel(MATL_DIFFUSE_MODEL::Lambert);
+			matlp->setShadingModel(MATL_SHADING_MODEL::Phong);
+			matlp->setSpecularModel(MATL_SPECULAR_MODEL::Phong);
+			matlp->setGpuProgram("phong");
+
 			auto texnum = scene->mMaterials[mesh->mMaterialIndex]->GetTextureCount(aiTextureType_DIFFUSE);
 			for (int i = 0; i < texnum; i++) {
 

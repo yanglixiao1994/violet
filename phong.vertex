@@ -3,9 +3,9 @@
 uniform float time;
 
 uniform vec3 camPosition;
-uniform mat4 MVP;
 uniform mat4 M;
 uniform mat4 V;
+uniform mat4 P;
 uniform int numlights;
 uniform struct Light{
 	vec3 position;
@@ -29,6 +29,7 @@ void main()
 	normal_world     = normalize(M * vec4(normal,1)).xyz;
 	eyedir_world     = normalize(camPosition - position).xyz;
 	uv_fragment      = uv; 
+	mat4 MVP 		 = P * V * M;
 	gl_Position      = MVP * vec4(position,1);
 }
 

@@ -45,32 +45,32 @@ namespace violet {
 		TEX_WARPING_TYPE	_warping;
 		TEX_FILTER_METHOD	_filter;
 	};
+	enum class MATL_BLEND_MODEL {
+		Opaque,
+		Masked,
+		Translucent,
+		Additive,
+		Modulate
+	};
+	enum class MATL_SHADING_MODEL {
+		Flat,
+		Gouraud,
+		Phong,
+	};
+	enum class MATL_DIFFUSE_MODEL {
+		Lambert,
+	};
+
+	enum class MATL_SPECULAR_MODEL {
+		Phong,
+		Blinn_Phong,
+		Cook_Torrance,
+	};
+	enum class MATL_PHYSICAL_MODEL {
+		Rigid,
+	};
 	class Material {
 		//The enum is arranged in the render pariority.
-		enum class MATL_BLEND_MODEL {
-			Opaque,
-			Masked,
-			Translucent,
-			Additive,
-			Modulate
-		};
-		enum class MATL_SHADING_MODEL {
-			Flat,
-			Gouraud,
-			Phong,
-		};
-		enum class MATL_DIFFUSE_MODEL {
-			Lambert,
-		};
-
-		enum class MATL_SPECULAR_MODEL {
-			Phong,
-			Blinn_Phong,
-			Cook_Torrance,
-		};
-		enum class MATL_PHYSICAL_MODEL {
-			Rigid,
-		};
 		struct RenderState {
 			MATL_BLEND_MODEL	_blend;
 			MATL_SHADING_MODEL  _shading;
@@ -113,7 +113,7 @@ namespace violet {
 		void				setShadingModel(MATL_SHADING_MODEL shading) { _shading = shading; }
 		void				setCullFace(bool cullface) { _cullface = cullface; }
 		void				setDepthTest(bool depthTest) { _depthtest = depthTest; }
-
+		void				setGpuProgram(const string&gpu_program) { _gpu_program = gpu_program; }
 	private:
 		friend class glRenderSystem;
 		//Render state

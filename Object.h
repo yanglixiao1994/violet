@@ -6,7 +6,7 @@ namespace violet {
 	class Object;
 	typedef shared_ptr<Object>  ObjPtr;
 	typedef list<ObjPtr> ObjList;
-	class Object:enable_shared_from_this<Object> {
+	class Object:public enable_shared_from_this<Object> {
 		friend class Scene;
 	protected:
 		//The relative information

@@ -5,7 +5,11 @@
 #include "RenderSystem.h"
 namespace violet {
 	class Scene {
-		typedef ObjList RenderQueue;
+		struct RenderUnit {
+			SubMeshPtr _submesh;
+			ObjPtr     _object;
+		};
+		using RenderQueue = vector<RenderUnit>;
 	private:
 		ObjPtr		  	 _root;
 		RenderSystem *	 _render;
