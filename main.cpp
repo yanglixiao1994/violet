@@ -5,7 +5,7 @@ int main() {
 	Scene scene;
 
 	CamPtr cam = make_shared<Camera>(vec3(0,0,-10),"walker");
-	scene.getRoot()->insertChild(cam);
+	scene.insert(cam, scene.getRoot());
 
 	LightPtr light = make_shared<Light>();
 
@@ -14,7 +14,7 @@ int main() {
 
 	ObjPtr vegetable(new Object());
 	vegetable->loadMesh("cube.obj");
-	scene.getRoot()->insertChild(vegetable);
+	scene.insert(vegetable,scene.getRoot());
 
 	scene.draw();
 

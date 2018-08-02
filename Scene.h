@@ -28,7 +28,7 @@ namespace violet {
 		}
 		ObjList getVisibleObject();
 		void	setCurCam(const string&);
-		void	insert(ObjPtr&obj, ObjPtr&parent);
+		void	insert(ObjPtr obj, ObjPtr&parent);
 		void	draw();
 	};
 }
