@@ -24,7 +24,7 @@ namespace violet {
 	typedef map<ATTRIBUTE_TYPE, vector<float>>		VertAttr1fV;
 
 	typedef map<ATTRIBUTE_TYPE, int>				VertAttr1i;
-	typedef map<ATTRIBUTE_TYPE, vector<int>>		VertAttr1iV;
+	typedef map<ATTRIBUTE_TYPE, vector<uint32>>		VertAttr1iV;
 	class GpuBuffer {
 	public:
 		GpuBuffer() :_active(false), _size(0) {};

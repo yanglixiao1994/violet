@@ -29,7 +29,7 @@ namespace violet {
 			gl_type = GL_ELEMENT_ARRAY_BUFFER;
 		}
 		else gl_type = GL_ARRAY_BUFFER;
-		glBindBuffer(gl_type, 1);
+		glBindBuffer(gl_type, _buffer_id);
 		glBufferData(gl_type, size, pSource, gl_usage);
 		_usage = usage;
 		_attb_type = type;

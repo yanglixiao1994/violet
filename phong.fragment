@@ -4,6 +4,8 @@
 
 uniform sampler2D tex[MAX_TEXS];
 uniform vec3 ambient;
+uniform vec3 diffuse;
+uniform vec3 emissive;
 uniform float K;
 uniform float gloss;
 uniform int numlights;
@@ -12,30 +14,32 @@ uniform struct Light{
 	vec3 color;
 }Lights[MAX_LIGHTS];
 
-in vec3 normal_world;
-in vec3 lidir_world[MAX_LIGHTS];
-in vec3 eyedir_world;
-in vec2 uv_fragment;
+//in vec3 normal_world;
+//in vec3 lidir_world[MAX_LIGHTS];
+//in vec3 eyedir_world;
+//in vec2 uv_fragment;
 
 out vec3 color;
 void main()
 {
-	vec3 diff,spec;
+	//vec3 diff,spec;
 	for(int i = 0;i < numlights;i++){
 		//diffuse    = Lights[i].color * (1 - K) * dot(N,L)
-		float fac    = clamp(dot(normal_world,lidir_world[i]),0,1);
-		diff	     += Lights[i].color * fac * (1 - K);
+		//float fac    = clamp(dot(normal_world,lidir_world[i]),0,1);
+		//diff	     += Lights[i].color * fac * (1 - K) * diffuse;
 
 		//specular   = Lights[i].color * K * pow(max(0,dot(R,V)),gloss)
-		vec3 R	     = normalize(reflect(eyedir_world,normal_world));
-		float fac_   = pow(max(0,dot(R,eyedir_world)),gloss);
-		spec    = K * fac_ * Lights[i].color ;
+		//vec3 R	     = normalize(reflect(eyedir_world,normal_world));
+		//float fac_   = pow(max(0,dot(R,eyedir_world)),gloss);
+		//spec         += K * fac_ * Lights[i].color;
 	}
 	//texture
-	vec3 tex	 = texture(tex[0],uv_fragment).rgb;
+	//vec3 tex	 = texture(tex[0],uv_fragment).rgb;
 
 	//final color
-	color		 = (diff + spec + ambient) * tex;
-	color.b 	 = 0.f;
-	color.r      = 1.f;
+
+	//color		 = (diff + spec + ambient) * tex;
+			color 		 = ambient + diffuse + emissive;
+	//color.r      = 1.f;
+
 }

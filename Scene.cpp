@@ -49,7 +49,7 @@ namespace violet {
 		_render->setColor(0, 0, 1);
 		RenderQueue renderq;
 		for (;;) {
-			glClear(GL_COLOR_BUFFER_BIT);
+			_render->clear();
 			ObjList visiableList = getVisibleObject();
 			renderq.clear();
 			for (const auto&obj : visiableList) {
@@ -67,8 +67,10 @@ namespace violet {
 				_render->bindSubMesh(unit._submesh);
 				_render->bindMaterial(unit._submesh->_matl);
 				_render->bindObject(unit._object);
+				mat4 MVP = _cur_cam->getProjMat()*_cur_cam->getViewMat() *unit._object->getToWorldMat();
 				//TODO:use uniform_buffer.
 				GlobalEnvironmentInfo info;
+				_cur_cam->update();
 				info._cur_cam = _cur_cam;
 				info._lights = _lightVec;
 				_render->bindGlobalEnvironmentInfo(info);

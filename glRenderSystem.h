@@ -15,6 +15,7 @@ namespace violet {
 		void draw(const SubMeshPtr&)final override;
 		void swapBuffer()final override;
 		void setColor(float r, float g, float b);
+		void clear();
 		bool isInGpu(const SubMeshPtr&);
 		void loadGpuProgram();
 	private:

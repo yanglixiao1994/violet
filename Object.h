@@ -62,6 +62,10 @@ namespace violet {
 				child->rotate(deg, axis);
 			}
 		}
+		virtual mat4 rotatex(float);
+		virtual mat4 rotatey(float);
+		virtual mat4 rotatez(float);
+
 		virtual void move(const vec3&step) {
 			_toWorld = translate(_toWorld, step);
 			for (auto &child : _childs) {
@@ -77,6 +81,8 @@ namespace violet {
 
 		Object(
 			const vec3&posi = vec3{ 0,0,0 },
+			const vec3&rotate = vec3{0,0,0},
+			const vec3&scaler = vec3{1.f,1.f,1.f},
 			Object *parent = nullptr,
 			Mesh   *mesh = nullptr,
 			bool dirty = true,
@@ -84,6 +90,8 @@ namespace violet {
 			bool throwshadow = true
 		) :
 			_posi{ posi },
+			_rotate{rotate},
+			_scaler{scaler},
 			_parent{ parent },
 			_mesh{ mesh },
 			_dirty{ dirty },

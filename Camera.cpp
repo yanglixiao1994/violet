@@ -50,11 +50,13 @@ namespace violet {
 				_posi -= right * deltaTime * _move_speed;
 			}
 
-			_P = glm::perspective(glm::radians(_FOV), _aspect, _near, _far);
+			_P = glm::perspective(_FOV, _aspect, _near, _far);
 			_V = glm::lookAt(
 				_posi,
-				_posi + direction,
-				up
+				//_posi + direction,
+				vec3(0,0,0),
+				//up
+				vec3(0,1,0)
 			);
 			break;
 		}

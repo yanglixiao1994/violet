@@ -38,7 +38,7 @@ namespace violet {
 		virtual void draw(const SubMeshPtr&) = 0;
 		virtual void swapBuffer() = 0;
 		virtual void setColor(float r, float g, float b) = 0;
-
+		virtual void clear() = 0;
 		virtual bool isInGpu(const SubMeshPtr&) = 0;
 	};
 
