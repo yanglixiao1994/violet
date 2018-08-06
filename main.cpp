@@ -4,7 +4,7 @@ using namespace violet;
 int main() {
 	Scene scene;
 
-	CamPtr cam = make_shared<Camera>(vec3(0,0,-10),"walker");
+	CamPtr cam = make_shared<Camera>(vec3(-10,0,0),"walker");
 	scene.insert(cam, scene.getRoot());
 	scene.setCurCam("walker");
 

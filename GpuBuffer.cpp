@@ -30,7 +30,58 @@ namespace violet {
 		}
 		else gl_type = GL_ARRAY_BUFFER;
 		glBindBuffer(gl_type, _buffer_id);
+		if (type == ATTRIBUTE_TYPE::Position) {
+			static const GLfloat g_vertex_buffer_data[] = {
+				-1.0f,-1.0f,-1.0f,
+				-1.0f,-1.0f, 1.0f,
+				-1.0f, 1.0f, 1.0f,
+				1.0f, 1.0f,-1.0f,
+				-1.0f,-1.0f,-1.0f,
+				-1.0f, 1.0f,-1.0f,
+				1.0f,-1.0f, 1.0f,
+				-1.0f,-1.0f,-1.0f,
+				1.0f,-1.0f,-1.0f,
+				1.0f, 1.0f,-1.0f,
+				1.0f,-1.0f,-1.0f,
+				-1.0f,-1.0f,-1.0f,
+				-1.0f,-1.0f,-1.0f,
+				-1.0f, 1.0f, 1.0f,
+				-1.0f, 1.0f,-1.0f,
+				1.0f,-1.0f, 1.0f,
+				-1.0f,-1.0f, 1.0f,
+				-1.0f,-1.0f,-1.0f,
+				-1.0f, 1.0f, 1.0f,
+				-1.0f,-1.0f, 1.0f,
+				1.0f,-1.0f, 1.0f,
+				1.0f, 1.0f, 1.0f,
+				1.0f,-1.0f,-1.0f,
+				1.0f, 1.0f,-1.0f,
+				1.0f,-1.0f,-1.0f,
+				1.0f, 1.0f, 1.0f,
+				1.0f,-1.0f, 1.0f,
+				1.0f, 1.0f, 1.0f,
+				1.0f, 1.0f,-1.0f,
+				-1.0f, 1.0f,-1.0f,
+				1.0f, 1.0f, 1.0f,
+				-1.0f, 1.0f,-1.0f,
+				-1.0f, 1.0f, 1.0f,
+				1.0f, 1.0f, 1.0f,
+				-1.0f, 1.0f, 1.0f,
+				1.0f,-1.0f, 1.0f
+			};
+			//glBufferData(gl_type, size, pSource, gl_usage);
+			glBufferData(gl_type, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, gl_usage);
+		}
 		glBufferData(gl_type, size, pSource, gl_usage);
+		//if (type == ATTRIBUTE_TYPE::Position) {
+		//	cout << "GPUBUFF---------------------" << endl;
+		//	for (int i = 0; i < size/4; i++) {
+		//		if (i % 3 == 0)cout << endl;
+		//		cout << (float)*((float*)pSource + i) << " ";
+		//	}
+		//	cout << "GPUBUFF---------------------" << endl;
+		//}
+
 		_usage = usage;
 		_attb_type = type;
 		_active = true;

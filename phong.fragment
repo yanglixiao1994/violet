@@ -3,6 +3,7 @@
 #define MAX_TEXS   3
 
 uniform sampler2D tex[MAX_TEXS];
+uniform mat4 V;
 uniform vec3 ambient;
 uniform vec3 diffuse;
 uniform vec3 emissive;
@@ -14,32 +15,32 @@ uniform struct Light{
 	vec3 color;
 }Lights[MAX_LIGHTS];
 
-//in vec3 normal_world;
-//in vec3 lidir_world[MAX_LIGHTS];
-//in vec3 eyedir_world;
-//in vec2 uv_fragment;
+in vec3 normal_cam;
+in vec3 eyedir_cam;
+in vec3 pos_cam;
+in vec2 UV;
 
 out vec3 color;
+
+vec3 applyLight(Light light){
+	vec3 spec,diff;
+
+	vec3 lightDir_cam =  (V * vec4(light.position,1)).xyz - pos_cam;
+	float diffAngle = clamp(dot(lightDir_cam,normal_cam),0,1);
+	diff = light.color * diffAngle * diffuse;
+
+	vec3 reflect_cam = reflect(-lightDir_cam,normal_cam);
+	float specAngle = clamp(dot(reflect_cam,eyedir_cam),0,1);
+	spec = specAngle * light.color;
+	return diffuse + spec;
+}
+
 void main()
 {
-	//vec3 diff,spec;
 	for(int i = 0;i < numlights;i++){
-		//diffuse    = Lights[i].color * (1 - K) * dot(N,L)
-		//float fac    = clamp(dot(normal_world,lidir_world[i]),0,1);
-		//diff	     += Lights[i].color * fac * (1 - K) * diffuse;
-
-		//specular   = Lights[i].color * K * pow(max(0,dot(R,V)),gloss)
-		//vec3 R	     = normalize(reflect(eyedir_world,normal_world));
-		//float fac_   = pow(max(0,dot(R,eyedir_world)),gloss);
-		//spec         += K * fac_ * Lights[i].color;
+		color += applyLight(Lights[i]);
 	}
-	//texture
-	//vec3 tex	 = texture(tex[0],uv_fragment).rgb;
-
-	//final color
-
-	//color		 = (diff + spec + ambient) * tex;
-			color 		 = ambient + diffuse + emissive;
-	//color.r      = 1.f;
-
+	color += emissive;
+	color += ambient;
+	color.b = 0.f;
 }

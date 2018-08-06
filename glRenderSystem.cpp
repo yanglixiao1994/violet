@@ -37,10 +37,10 @@ namespace violet {
 
 	void glRenderSystem::bindGlobalEnvironmentInfo(const GlobalEnvironmentInfo&geinfo) {
 
-		GLuint campos = glGetUniformLocation(_cur_gpu_program, "camposition");
-		Assert(campos != -1);
-		glUniform3f(campos, geinfo._cur_cam->getPosition()[0],
-			geinfo._cur_cam->getPosition()[1], geinfo._cur_cam->getPosition()[2]);
+		//GLuint campos = glGetUniformLocation(_cur_gpu_program, "campos");
+		//Assert(campos != -1);
+		//glUniform3f(campos, geinfo._cur_cam->getPosition()[0],
+		//	geinfo._cur_cam->getPosition()[1], geinfo._cur_cam->getPosition()[2]);
 
 		GLuint numLights = glGetUniformLocation(_cur_gpu_program, "numlights");
 		Assert(numLights != -1);
@@ -152,9 +152,15 @@ namespace violet {
 				GpuBufferPtr gbuff = make_unique<glGpuBuffer>();
 				gbuff->createBuffer(BUFFER_USAGE::Static, p3.first,
 					p3.second.size() * sizeof(vec3), (void*)&(p3.second[0].x));
-				for (auto x : p3.second) {
-					cout << x.x << " " << x.y << " " << x.z << endl;
-				}
+				//
+				//void *pSource = (void*)&(p3.second[0].x);
+				//int size = 0;
+				//for (auto x : p3.second) {
+				//	cout << x.x << " " << x.y << " " << x.z << endl;
+				//	cout << (float)*((float*)pSource + size) << " "<< (float)*((float*)pSource + size + 1) <<" "<< (float)*((float*)pSource + size + 2)<< endl;
+				//	size += 3;
+				//}
+				//cout << "-----------------" << endl;
 				submesh->_gpubuffers.push_back(std::move(gbuff));
 			}
 			for (const auto&p2 : submesh->_vertattr2fv) {
@@ -188,7 +194,7 @@ namespace violet {
 		int num_attrib = 0;
 		for (const auto&gbuff : submesh->_gpubuffers) {
 			if (gbuff->getAttributeType() == ATTRIBUTE_TYPE::Index) {
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gbuff->getBufferId());
+				//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gbuff->getBufferId());
 			}
 			else if (is_in(gbuff->getAttributeType(), { ATTRIBUTE_TYPE::Normal,ATTRIBUTE_TYPE::Position,ATTRIBUTE_TYPE::VertexColor })) {
 				glBindBuffer(GL_ARRAY_BUFFER, gbuff->getBufferId());
@@ -219,12 +225,13 @@ namespace violet {
 	}
 
 	void glRenderSystem::draw(const SubMeshPtr&mesh) {
-		glDrawElements(
-			GL_TRIANGLES, 
-			//mesh->_vertattr1iv[ATTRIBUTE_TYPE::Index].size(), 
-			36,
-			GL_UNSIGNED_INT, 
-			(void*)0);
+		//glDrawElements(
+		//	GL_TRIANGLES, 
+		//	//mesh->_vertattr1iv[ATTRIBUTE_TYPE::Index].size(), 
+		//	36,
+		//	GL_UNSIGNED_INT, 
+		//	(void*)0);
+		glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
 	}
 
 	void glRenderSystem::swapBuffer() {

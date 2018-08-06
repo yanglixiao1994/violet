@@ -60,7 +60,7 @@ namespace violet {
 			matlp->insertParam3f("ambient", glm::vec3{ ambient.r,ambient.g,ambient.b });
 			scene->mMaterials[mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_AMBIENT, diffuse);
 			matlp->insertParam3f("diffuse", glm::vec3{ diffuse.r,diffuse.g,diffuse.b });
-			scene->mMaterials[mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_AMBIENT, emissive);
+			scene->mMaterials[mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_EMISSIVE, emissive);
 			matlp->insertParam3f("emissive", glm::vec3{ emissive.r,emissive.g,emissive.b });
 
 			matlp->setBlendModel(MATL_BLEND_MODEL::Opaque);

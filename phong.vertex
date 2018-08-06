@@ -2,35 +2,27 @@
 #define MAX_LIGHTS 10
 uniform float time;
 
-uniform vec3 camposition;
+//uniform vec3 campos;
 uniform mat4 M;
 uniform mat4 V;
 uniform mat4 P;
-uniform int numlights;
-uniform struct Light{
-	vec3 position;
-	vec3 color;
-}Lights[MAX_LIGHTS];
 
 layout(location = 0)in vec3 position;
 layout(location = 1)in vec3 normal; 
 layout(location = 2)in vec2 uv;
 
 
-out vec3 normal_world;
-out vec3 lidir_world[MAX_LIGHTS];
-out vec3 eyedir_world;
-out vec2 uv_fragment;
+out vec3 normal_cam;
+out vec3 eyedir_cam;
+out vec3 pos_cam;
+out vec2 UV;
 
 void main()
 {
-	eyedir_world     = normalize(Lights[i].position - camposition - position).xyz;
-	for(int i = 0;i < numlights;i++){
-		//lidir_world[i] = normalize(Lights[i].position - camposition + Lights[i].color).xyz;
-	}
-	normal_world     = normalize(M * vec4(normal,1)).xyz;
-
-	uv_fragment      = uv; 
+	normal_cam	     = normalize(V * M * vec4(normal,1)).xyz;
+	pos_cam			 = (V * M * vec4(position,1)).xyz;
+	eyedir_cam       = normalize(vec3(0,0,0) - pos_cam);
+	UV  		     = uv; 
 	mat4 MVP 		 = P * V * M;
 	gl_Position      = MVP * vec4(position,1);
 }
