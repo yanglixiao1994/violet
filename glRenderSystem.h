@@ -5,7 +5,7 @@ namespace violet {
 	class glRenderSystem :public RenderSystem {
 	public:
 		glRenderSystem(const WindowInfo&);
-		void setGpuProgram()final override;
+		void setGpuProgram(const string&)final override;
 		void bindGlobalEnvironmentInfo(const GlobalEnvironmentInfo&)final override;
 		void bindMaterial(const MatlPtr&)final override;
 		void uploadSubMesh2Gpu(const SubMeshPtr&)final override;
@@ -21,11 +21,11 @@ namespace violet {
 	private:
 		uint							_width;
 		uint							_height;
-		bool							_fullscreen;
+		bool							_fullScreen;
 		std::string						_title;
 
-		GLuint							_cur_gpu_program;
-		std::map<std::string, GLuint>	_gpu_program_cache;
-		MatlPtr							_cur_matl;
+		GLuint							_curGpuProgram;
+		std::map<std::string, GLuint>	_gpuProgramCache;
+		MatlPtr							_curMatl;
 	};
 }

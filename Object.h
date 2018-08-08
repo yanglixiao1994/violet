@@ -33,6 +33,9 @@ namespace violet {
 			obj->setParent(shared_from_this());
 		}
 	public:
+		virtual void setMesh(const MeshPtr&mesh) {
+			_mesh = mesh;
+		}
 
 		virtual void loadMesh(const string&file) {
 			if (_mesh.get())_mesh->clear();
@@ -68,6 +71,7 @@ namespace violet {
 
 		virtual void move(const vec3&step) {
 			_toWorld = translate(_toWorld, step);
+			_posi += step;
 			for (auto &child : _childs) {
 				child->move(step);
 			}

@@ -23,6 +23,7 @@ namespace violet {
 		PRIMITIVE_TYPE			_primitive;
 		GpuBufferList			_gpubuffers;
 		uint32					_gpuid;
+		uint32					_vaoid;
 		bool					_isInGpu;
 		bool operator <=(const SubMesh&)const;
 	};
@@ -45,5 +46,5 @@ namespace violet {
 		SubMeshVec	_submeshs;
 		string      _file;
 	};
-	using MeshPtr = unique_ptr<Mesh>;
+	using MeshPtr = shared_ptr<Mesh>;
 }

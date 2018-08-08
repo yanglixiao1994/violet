@@ -4,7 +4,7 @@
 namespace violet {
 	using namespace glm;
 	enum class CAM_CONTROL_TYPE {
-		FIRST_PERSON,
+		FirstPerson,
 	};
 	/*
 	Every camera should have a name, we can set a current camera in scene throw the name.
@@ -30,8 +30,8 @@ namespace violet {
 			update();
 		}
 		void setSpeed(float move_speed = 3.f, float rotate_speed = .005f) {
-			_move_speed = move_speed;
-			_rotate_speed = rotate_speed;
+			_moveSpeed = move_speed;
+			_rotateSpeed = rotate_speed;
 		}
 		Camera(const vec3&p = vec3(0, 0, 0),
 			const string&name = {"defalut"},
@@ -41,16 +41,16 @@ namespace violet {
 			float FOV = radians(45.f),
 			float move_speed = 3.f,
 			float rotate_speed = .005f,
-			CAM_CONTROL_TYPE ctr = CAM_CONTROL_TYPE::FIRST_PERSON) :
+			CAM_CONTROL_TYPE ctr = CAM_CONTROL_TYPE::FirstPerson) :
 			Object{ p },
 			_name{name},
 			_far{ far },
 			_near{ near },
 			_aspect{ aspect },
 			_FOV{ FOV },
-			_move_speed{ move_speed },
-			_rotate_speed{ rotate_speed },
-			_ctr{ ctr }
+			_moveSpeed{ move_speed },
+			_rotateSpeed{ rotate_speed },
+			_ctrType{ ctr }
 		{
 			update();
 		}
@@ -59,12 +59,12 @@ namespace violet {
 	private:
 		mat4 _V;
 		mat4 _P;
-		CAM_CONTROL_TYPE _ctr;
+		CAM_CONTROL_TYPE _ctrType;
 		float _far, _near;
 		float _aspect;
 		float _FOV;
-		float _move_speed;
-		float _rotate_speed;
+		float _moveSpeed;
+		float _rotateSpeed;
 		string _name;
 	};
 	typedef shared_ptr<Camera>   CamPtr;

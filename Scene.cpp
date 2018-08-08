@@ -7,11 +7,11 @@ namespace violet {
 	void Scene::setCurCam(const string&name) {
 		for (const auto&cam : _camList) {
 			if (cam->getName() == name) {
-				_cur_cam = cam;
+				_curCam = cam;
 				return;
 			}
 		}
-		Assert(1 == 2);
+		Assert(1 == 2);//No Camera
 	}
 
 	ObjList Scene::getVisibleObject() {
@@ -20,7 +20,7 @@ namespace violet {
 		temp.push(_root);
 		for (;temp.size()!=0;) {
 			ObjPtr curobj = temp.front();
-			if (_cur_cam->isInView(curobj) && curobj->_mesh.get() != nullptr)
+			if (_curCam->isInView(curobj) && curobj->_mesh.get() != nullptr)
 				result.push_back(curobj);
 			for (const auto&child : curobj->_childs) {
 				temp.push(child);
@@ -46,7 +46,7 @@ namespace violet {
 	}
 
 	void Scene::draw() {
-		_render->setColor(0, 0, 1);
+		_render->setColor(0, 0, 0);
 		RenderQueue renderq;
 		for (;;) {
 			_render->clear();
@@ -67,11 +67,11 @@ namespace violet {
 				_render->bindSubMesh(unit._submesh);
 				_render->bindMaterial(unit._submesh->_matl);
 				_render->bindObject(unit._object);
-				mat4 MVP = _cur_cam->getProjMat()*_cur_cam->getViewMat() *unit._object->getToWorldMat();
+				mat4 MVP = _curCam->getProjMat()*_curCam->getViewMat() *unit._object->getToWorldMat();
 				//TODO:use uniform_buffer.
 				GlobalEnvironmentInfo info;
-				_cur_cam->update();
-				info._cur_cam = _cur_cam;
+				_curCam->update();
+				info._curCam = _curCam;
 				info._lights = _lightVec;
 				_render->bindGlobalEnvironmentInfo(info);
 				_render->draw(unit._submesh);

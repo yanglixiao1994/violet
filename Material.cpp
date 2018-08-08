@@ -3,8 +3,8 @@
 #include "Material.h"
 namespace violet {
 	void Texture::loadFile(const std::string&file) {
-		_data_uint8 = stbi_load(file.c_str(), &_width, &_height, &_channels, 0);
-		_data_type = TEX_DATATYPE::UINT8;
+		_dataUint8 = stbi_load(file.c_str(), &_width, &_height, &_channels, 0);
+		_dataType = TEX_DATA_TYPE::Uint8;
 		_file = file;
 		_warping = TEX_WARPING_TYPE::Repeat;
 		_filter = TEX_FILTER_METHOD::Nearest;
@@ -19,8 +19,9 @@ namespace violet {
 		MATL_SPECULAR_MODEL spm = { MATL_SPECULAR_MODEL::Phong },
 		bool cullface = { true },
 		bool depthtest = { false },
+		DEPTH_FUNCTION depthfunc = {DEPTH_FUNCTION::Less},
 		const string&gpu_program = { "Phong" }
-	) :_blend{ bm }, _shading{ sm }, _diffuse{ dm }, _specular{ spm }, _cullface{ cullface }, _depthtest{ depthtest } {};
+	) :_blend{ bm }, _shading{ sm }, _diffuse{ dm }, _specular{ spm }, _cullface{ cullface }, _depthTest{ depthtest } {};
 
 	bool Material::operator <= (const Material&m)const {
 		if (_blend <= m._blend)

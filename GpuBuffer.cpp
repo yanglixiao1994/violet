@@ -6,13 +6,13 @@ namespace violet {
 
 	void glGpuBuffer::deleteBuffer() {
 		if (!_active)
-			glDeleteBuffers(_size, &_buffer_id);
+			glDeleteBuffers(_size, &_bufferId);
 	}
 
 	void glGpuBuffer::createBuffer(BUFFER_USAGE usage, ATTRIBUTE_TYPE type, uint32 size, void* pSource) {
 		if (_active)return;
 
-		glGenBuffers(1, &_buffer_id);
+		glGenBuffers(1, &_bufferId);
 		GLenum gl_type, gl_usage;
 
 		switch (usage) {
@@ -29,7 +29,7 @@ namespace violet {
 			gl_type = GL_ELEMENT_ARRAY_BUFFER;
 		}
 		else gl_type = GL_ARRAY_BUFFER;
-		glBindBuffer(gl_type, _buffer_id);
+		glBindBuffer(gl_type, _bufferId);
 		if (type == ATTRIBUTE_TYPE::Position) {
 			static const GLfloat g_vertex_buffer_data[] = {
 				-1.0f,-1.0f,-1.0f,
@@ -83,15 +83,15 @@ namespace violet {
 		//}
 
 		_usage = usage;
-		_attb_type = type;
+		_attbType = type;
 		_active = true;
 	}
 
 	void glGpuBuffer::readData(uint32 offset, uint32 length, void *pDest)
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, _buffer_id);
+		glBindBuffer(GL_ARRAY_BUFFER, _bufferId);
 		GLenum gl_type;
-		if (_attb_type != ATTRIBUTE_TYPE::Index) {
+		if (_attbType != ATTRIBUTE_TYPE::Index) {
 			gl_type = GL_ARRAY_BUFFER;
 		}
 		else gl_type = GL_ELEMENT_ARRAY_BUFFER;
@@ -100,9 +100,9 @@ namespace violet {
 
 	void glGpuBuffer::writeData(uint32 offset, uint32 length, void *pDest)
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, _buffer_id);
+		glBindBuffer(GL_ARRAY_BUFFER, _bufferId);
 		GLenum gl_type;
-		if (_attb_type != ATTRIBUTE_TYPE::Index) {
+		if (_attbType != ATTRIBUTE_TYPE::Index) {
 			gl_type = GL_ARRAY_BUFFER;
 		}
 		else gl_type = GL_ELEMENT_ARRAY_BUFFER;

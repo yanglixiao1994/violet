@@ -6,6 +6,7 @@ namespace violet {
 		glfwWindowHint(GLFW_SAMPLES, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		window = glfwCreateWindow(wi._width, wi._height, wi._title.c_str(), NULL, NULL);
 		
@@ -15,11 +16,7 @@ namespace violet {
 		
 		Assert(glewInit() == GLEW_OK);
 		glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
-		glClearColor(0.f, 0.f, .4f, 0.f);
-		
-		//glEnable(GL_DEPTH_TEST);
-		//glDepthFunc(GL_LESS);
-		//glEnable(GL_CULL_FACE);
+
 		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 		loadGpuProgram();
 	}
@@ -27,22 +24,22 @@ namespace violet {
 	void glRenderSystem::loadGpuProgram() {
 		GpuProgram gprogram;
 		gprogram.loadShaders("phong.vertex", "phong.fragment");
-		_gpu_program_cache.insert(pair<string, GLuint>("phong", gprogram.id));
+		_gpuProgramCache.insert(pair<string, GLuint>("phong", gprogram.id));
 	}
 
-	void glRenderSystem::setGpuProgram() {
-		_cur_gpu_program = _gpu_program_cache[(*_cur_matl).getGpuProgramName()];
-		glUseProgram(_cur_gpu_program);
+	void glRenderSystem::setGpuProgram(const string&gpuName) {
+		_curGpuProgram = _gpuProgramCache.at(gpuName);
+		glUseProgram(_curGpuProgram);
 	}
 
 	void glRenderSystem::bindGlobalEnvironmentInfo(const GlobalEnvironmentInfo&geinfo) {
 
-		//GLuint campos = glGetUniformLocation(_cur_gpu_program, "campos");
+		//GLuint campos = glGetUniformLocation(_curGpuProgram, "campos");
 		//Assert(campos != -1);
-		//glUniform3f(campos, geinfo._cur_cam->getPosition()[0],
-		//	geinfo._cur_cam->getPosition()[1], geinfo._cur_cam->getPosition()[2]);
+		//glUniform3f(campos, geinfo._curCam->getPosition()[0],
+		//	geinfo._curCam->getPosition()[1], geinfo._curCam->getPosition()[2]);
 
-		GLuint numLights = glGetUniformLocation(_cur_gpu_program, "numlights");
+		GLuint numLights = glGetUniformLocation(_curGpuProgram, "numlights");
 		Assert(numLights != -1);
 		glUniform1i(numLights, geinfo._lights.size());
 		int i = 0;
@@ -54,7 +51,7 @@ namespace violet {
 
 				ss << "Lights[" << i << "].position" << ends;
 				uniformName = ss.str();
-				GLuint lightpos = glGetUniformLocation(_cur_gpu_program, uniformName.c_str());
+				GLuint lightpos = glGetUniformLocation(_curGpuProgram, uniformName.c_str());
 				Assert(lightpos != -1);
 				glUniform3fv(lightpos, 1, &geinfo._lights[i]->getPosition()[0]);
 
@@ -62,54 +59,70 @@ namespace violet {
 				ss.str("");
 				ss << "Lights[" << i << "].color" << ends;
 				uniformName = ss.str();
-				GLuint lightcolor = glGetUniformLocation(_cur_gpu_program, uniformName.c_str());
+				GLuint lightcolor = glGetUniformLocation(_curGpuProgram, uniformName.c_str());
 				Assert(lightcolor != -1);
 				glUniform3fv(lightcolor, 1, &geinfo._lights[i]->getColor()[0]);
 			}
 			++i;
 		}
-		GLuint V = glGetUniformLocation(_cur_gpu_program, "V");
+		GLuint V = glGetUniformLocation(_curGpuProgram, "V");
 		Assert(V != -1);
-		glUniformMatrix4fv(V, 1, GL_FALSE, &geinfo._cur_cam->getViewMat()[0][0]);
-		GLuint P = glGetUniformLocation(_cur_gpu_program, "P");
+		glUniformMatrix4fv(V, 1, GL_FALSE, &geinfo._curCam->getViewMat()[0][0]);
+		GLuint P = glGetUniformLocation(_curGpuProgram, "P");
 		Assert(P != -1);
-		glUniformMatrix4fv(P, 1, GL_FALSE, &geinfo._cur_cam->getProjMat()[0][0]);
+		glUniformMatrix4fv(P, 1, GL_FALSE, &geinfo._curCam->getProjMat()[0][0]);
 	}
-
+	//TODO:Compare the current matl with the matl,and change the different states.
 	void glRenderSystem::bindMaterial(const MatlPtr&mat) {
-		_cur_matl = mat;
-		setGpuProgram();
+		if (!_curMatl.get() || mat->_cullface != _curMatl->_cullface) {
+			if (mat->_cullface)
+				glEnable(GL_CULL_FACE);
+			else glDisable(GL_CULL_FACE);
+		}
+
+		if (!_curMatl.get() || mat->_depthTest != _curMatl->_depthTest) {
+			if(mat->_depthTest)
+				glEnable(GL_DEPTH_TEST);
+			else glDisable(GL_DEPTH_TEST);
+		}
+
+		if (!_curMatl.get() || mat->_depthFunc != _curMatl->_depthFunc) {
+			switch (mat->_depthFunc)
+			{
+			case DEPTH_FUNCTION::Always:glDepthFunc(GL_ALWAYS); break;
+			case DEPTH_FUNCTION::Equal:glDepthFunc(GL_EQUAL); break;
+			case DEPTH_FUNCTION::Greater:glDepthFunc(GL_GREATER); break;
+			case DEPTH_FUNCTION::GreaterEqual:glDepthFunc(GL_GEQUAL); break;
+			case DEPTH_FUNCTION::Less:glDepthFunc(GL_LESS); break;
+			case DEPTH_FUNCTION::LessEqual:glDepthFunc(GL_LEQUAL); break;
+			case DEPTH_FUNCTION::Never:glDepthFunc(GL_NEVER); break;
+			case DEPTH_FUNCTION::NotEqual:glDepthFunc(GL_NOTEQUAL); break;
+			}
+		}
+		if(!_curMatl.get() || mat->_gpuProgram != _curMatl->_gpuProgram)setGpuProgram(mat->getGpuProgramName());
+
 		for (const auto &para3 : mat->_param3f) {
-			GLuint paramid = glGetUniformLocation(_cur_gpu_program, para3.first.c_str());
+			GLuint paramid = glGetUniformLocation(_curGpuProgram, para3.first.c_str());
 			Assert(paramid != -1);
 			glUniform3f(paramid, para3.second.x, para3.second.y, para3.second.z);
 		}
 
 		for (const auto &para2 : mat->_param2f) {
-			GLuint paramid = glGetUniformLocation(_cur_gpu_program, para2.first.c_str());
+			GLuint paramid = glGetUniformLocation(_curGpuProgram, para2.first.c_str());
 			Assert(paramid != -1);
 			glUniform2f(paramid, para2.second.x, para2.second.y);
 		}
 
 		for (const auto &para1 : mat->_param1f) {
-			GLuint paramid = glGetUniformLocation(_cur_gpu_program, para1.first.c_str());
+			GLuint paramid = glGetUniformLocation(_curGpuProgram, para1.first.c_str());
 			Assert(paramid != -1);
-
 			glUniform1f(paramid, para1.second);
 		}
-		//if (mat->_cullface)
-		//	glEnable(GL_CULL_FACE);
-		//else glDisable(GL_CULL_FACE);
-		//if (mat->_depthtest)
-		//	glEnable(GL_DEPTH_TEST);
-		//else glDisable(GL_DEPTH_TEST);
-
-		glDisable(GL_CULL_FACE);
-		glDisable(GL_DEPTH_TEST);
+		_curMatl = mat;
 	}
 
 	void glRenderSystem::bindObject(const ObjPtr&obj) {
-		GLuint M = glGetUniformLocation(_cur_gpu_program, "M");
+		GLuint M = glGetUniformLocation(_curGpuProgram, "M");
 		Assert(M != -1);
 
 		mat4 toWorld = obj->getToWorldMat();
@@ -148,19 +161,12 @@ namespace violet {
 			submesh->_gpubuffers.clear();
 			Assert(submesh->_num_vertex_attributes ==
 				submesh->_vertattr1fv.size() + submesh->_vertattr2fv.size() + submesh->_vertattr3fv.size() + submesh->_vertattr1iv.size());
+			glGenVertexArrays(1, &submesh->_vaoid);
+			glBindVertexArray(submesh->_vaoid);
 			for (const auto&p3 : submesh->_vertattr3fv) {
 				GpuBufferPtr gbuff = make_unique<glGpuBuffer>();
 				gbuff->createBuffer(BUFFER_USAGE::Static, p3.first,
 					p3.second.size() * sizeof(vec3), (void*)&(p3.second[0].x));
-				//
-				//void *pSource = (void*)&(p3.second[0].x);
-				//int size = 0;
-				//for (auto x : p3.second) {
-				//	cout << x.x << " " << x.y << " " << x.z << endl;
-				//	cout << (float)*((float*)pSource + size) << " "<< (float)*((float*)pSource + size + 1) <<" "<< (float)*((float*)pSource + size + 2)<< endl;
-				//	size += 3;
-				//}
-				//cout << "-----------------" << endl;
 				submesh->_gpubuffers.push_back(std::move(gbuff));
 			}
 			for (const auto&p2 : submesh->_vertattr2fv) {
@@ -194,7 +200,7 @@ namespace violet {
 		int num_attrib = 0;
 		for (const auto&gbuff : submesh->_gpubuffers) {
 			if (gbuff->getAttributeType() == ATTRIBUTE_TYPE::Index) {
-				//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gbuff->getBufferId());
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gbuff->getBufferId());
 			}
 			else if (is_in(gbuff->getAttributeType(), { ATTRIBUTE_TYPE::Normal,ATTRIBUTE_TYPE::Position,ATTRIBUTE_TYPE::VertexColor })) {
 				glBindBuffer(GL_ARRAY_BUFFER, gbuff->getBufferId());
@@ -225,13 +231,12 @@ namespace violet {
 	}
 
 	void glRenderSystem::draw(const SubMeshPtr&mesh) {
-		//glDrawElements(
-		//	GL_TRIANGLES, 
-		//	//mesh->_vertattr1iv[ATTRIBUTE_TYPE::Index].size(), 
-		//	36,
-		//	GL_UNSIGNED_INT, 
-		//	(void*)0);
-		glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
+		glDrawElements(
+			GL_TRIANGLES, 
+			mesh->_vertattr1iv[ATTRIBUTE_TYPE::Index].size(), 
+			//36,
+			GL_UNSIGNED_INT, 
+			(void*)0);
 	}
 
 	void glRenderSystem::swapBuffer() {
@@ -244,7 +249,7 @@ namespace violet {
 	}
 
 	void glRenderSystem::clear() {
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT| GL_DEPTH_BUFFER_BIT);
 	}
 
 	bool glRenderSystem::isInGpu(const SubMeshPtr&submesh) {

@@ -37,10 +37,10 @@ namespace violet {
 			return _size;
 		}
 		uint32			getBufferId() {
-			return _buffer_id;
+			return _bufferId;
 		}
 		void			setBufferId(uint32 id) {
-			_buffer_id = id;
+			_bufferId = id;
 		}
 		BUFFER_USAGE	getBufferUsage() {
 			return _usage;
@@ -49,10 +49,10 @@ namespace violet {
 			_usage = usage;
 		}
 		ATTRIBUTE_TYPE  getAttributeType() {
-			return _attb_type;
+			return _attbType;
 		}
 		void			setAttributeType(ATTRIBUTE_TYPE attr) {
-			_attb_type = attr;
+			_attbType = attr;
 		}
 		bool			isSystemBuffer() {
 			return _inSystemBuffer;
@@ -68,10 +68,10 @@ namespace violet {
 		bool			 _active;
 		uint32			 _size;
 		BUFFER_USAGE	 _usage;
-		ATTRIBUTE_TYPE	 _attb_type;
+		ATTRIBUTE_TYPE	 _attbType;
 		bool			 _inSystemBuffer;
 		bool			 _inVideoBuffer;
-		uint32			 _buffer_id;
+		uint32			 _bufferId;
 	};
 
 	typedef unique_ptr<GpuBuffer>	GpuBufferPtr;

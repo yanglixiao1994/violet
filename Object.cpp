@@ -3,10 +3,14 @@ namespace violet {
 
 	mat4 Object::localToParent() {
 		return glm::mat4(//for translation
-			glm::vec4(1.f, 0.f, 0.f, _posi.x),
-			glm::vec4(0.f, 1.f, 0.f, _posi.y),
-			glm::vec4(0.f, 0.f, 1.f, _posi.z),
-			glm::vec4(0.f, 0.f, 0.f, 1.f))
+			//glm::vec4(1.f, 0.f, 0.f, _posi.x),
+			//glm::vec4(0.f, 1.f, 0.f, _posi.y),
+			//glm::vec4(0.f, 0.f, 1.f, _posi.z),
+			//glm::vec4(0.f, 0.f, 0.f, 1.f))
+			glm::vec4(1.f, 0.f, 0.f, 0.f),
+			glm::vec4(0.f, 1.f, 0.f, 0.f),
+			glm::vec4(0.f, 0.f, 1.f, 0.f),
+			glm::vec4(_posi.x, _posi.y, _posi.z, 1.f))
 			* rotatez(_rotate.z)
 			* rotatey(_rotate.y)
 			* rotatex(_rotate.x)

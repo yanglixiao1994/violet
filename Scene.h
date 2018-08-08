@@ -14,7 +14,7 @@ namespace violet {
 		ObjPtr		  	 _root;
 		RenderSystem *	 _render;
 
-		CamPtr			 _cur_cam;
+		CamPtr			 _curCam;
 		CamList			 _camList;
 		LightVec		 _lightVec;
 

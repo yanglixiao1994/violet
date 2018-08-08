@@ -19,7 +19,8 @@ out vec2 UV;
 
 void main()
 {
-	normal_cam	     = normalize(V * M * vec4(normal,1)).xyz;
+	mat4 norm2cam	 = transpose(inverse(V * M));
+	normal_cam	     = normalize(norm2cam * vec4(normal,1)).xyz;
 	pos_cam			 = (V * M * vec4(position,1)).xyz;
 	eyedir_cam       = normalize(vec3(0,0,0) - pos_cam);
 	UV  		     = uv; 

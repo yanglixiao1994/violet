@@ -16,14 +16,26 @@ namespace violet {
 	class Material;
 	typedef shared_ptr<Material> MatlPtr;
 	typedef list<MatlPtr> MatlList;
+
+	enum class DEPTH_FUNCTION {
+		Less,
+		Equal,
+		LessEqual,
+		Greater,
+		NotEqual,
+		GreaterEqual,
+		Always,
+		Never,
+	};
+
 	class Texture {
 		enum class TEX_FILTER_METHOD {
 			Nearest,
 			Linear,
 		};
-		enum class TEX_DATATYPE {
+		enum class TEX_DATA_TYPE {
 			Float,
-			UINT8,
+			Uint8,
 		};
 		enum class TEX_WARPING_TYPE {
 			Repeat,
@@ -35,13 +47,13 @@ namespace violet {
 		Texture(const string&file);
 		void loadFile(const string&file);
 	private:
-		uint8		*	    _data_uint8;
-		float		*		_data_float;
+		uint8		*	    _dataUint8;
+		float		*		_dataFloat;
 		int					_width;
 		int					_height;
 		int					_channels;
 		string				_file;
-		TEX_DATATYPE		_data_type;
+		TEX_DATA_TYPE		_dataType;
 		TEX_WARPING_TYPE	_warping;
 		TEX_FILTER_METHOD	_filter;
 	};
@@ -76,8 +88,9 @@ namespace violet {
 			MATL_SHADING_MODEL  _shading;
 			MATL_DIFFUSE_MODEL	_diffuse;
 			MATL_SPECULAR_MODEL _specular;
-			bool				_cullface;
-			bool				_depthtest;
+			bool				_cullFace;
+			bool				_depthTest;
+			DEPTH_FUNCTION		_depthFunc;
 		};
 	public:
 		Material(
@@ -87,13 +100,14 @@ namespace violet {
 			MATL_SPECULAR_MODEL,
 			bool cullface,
 			bool depthtest,
+			DEPTH_FUNCTION depthfunc,
 			const string&gpu_program
 		);
 		Material() {};
 		Material(const std::string&) {};
 		//Compare the pariority
 		bool		operator <=(const Material&)const;
-		string		getGpuProgramName()const { return _gpu_program; }
+		string		getGpuProgramName()const { return _gpuProgram; }
 		void		insertParam3f(const string&name, const glm::vec3&param);
 		void		insertParam2f(const string&name, const glm::vec2&param);
 		void		insertParam1f(const string&name, float param);
@@ -106,14 +120,14 @@ namespace violet {
 		MATL_SHADING_MODEL	getShadingModel() { return _shading; }
 		MATL_SPECULAR_MODEL getSpecularModel() { return _specular; }
 		bool				isCullFace() { return _cullface; }
-		bool				isDepthTest() { return _depthtest; }
+		bool				isDepthTest() { return _depthTest; }
 		void				setBlendModel(MATL_BLEND_MODEL blend) { _blend = blend; }
 		void				setDiffuseModel(MATL_DIFFUSE_MODEL diffuse) { _diffuse = diffuse; }
 		void				setSpecularModel(MATL_SPECULAR_MODEL specular) { _specular = specular; }
 		void				setShadingModel(MATL_SHADING_MODEL shading) { _shading = shading; }
 		void				setCullFace(bool cullface) { _cullface = cullface; }
-		void				setDepthTest(bool depthTest) { _depthtest = depthTest; }
-		void				setGpuProgram(const string&gpu_program) { _gpu_program = gpu_program; }
+		void				setDepthTest(bool depthTest) { _depthTest = depthTest; }
+		void				setGpuProgram(const string&gpu_program) { _gpuProgram = gpu_program; }
 	private:
 		friend class glRenderSystem;
 		//Render state
@@ -122,9 +136,10 @@ namespace violet {
 		MATL_DIFFUSE_MODEL	_diffuse;
 		MATL_SPECULAR_MODEL _specular;
 		bool				_cullface;
-		bool				_depthtest;
+		bool				_depthTest;
+		DEPTH_FUNCTION		_depthFunc;
 		//
-		string				_gpu_program;
+		string				_gpuProgram;
 		vector<Texture>		_texs;
 		Param1f				_param1f;
 		Param2f				_param2f;

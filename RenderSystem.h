@@ -8,23 +8,24 @@
 namespace violet {
 	struct GlobalEnvironmentInfo {
 		LightVec _lights;
-		CamPtr   _cur_cam;
+		CamPtr   _curCam;
 	};
 
 	struct WindowInfo {
 		string _title;
 		uint32 _width;
 		uint32 _height;
-		bool _fullscreen;
+		bool _fullScreen;
 		WindowInfo(const string&title, uint32 width, uint32 height, bool fullscreen) :
-			_title(title), _width(width), _height(height), _fullscreen(fullscreen) {};
+			_title(title), _width(width), _height(height), _fullScreen(fullscreen) {};
 	};
 	/*
 	A Scene may have many cameras,but a render system can only have one.
 	*/
 	class RenderSystem {
+
 	public:
-		virtual void setGpuProgram() = 0;
+		virtual void setGpuProgram(const string&) = 0;
 		//Environment,e.g. Lights,Camera.
 		virtual void bindGlobalEnvironmentInfo(const GlobalEnvironmentInfo&) = 0;
 		//Different materials have different "BRDF",texture,etc.
@@ -40,6 +41,11 @@ namespace violet {
 		virtual void setColor(float r, float g, float b) = 0;
 		virtual void clear() = 0;
 		virtual bool isInGpu(const SubMeshPtr&) = 0;
+
+	protected:
+		DEPTH_FUNCTION _curDepthFunc;
+		bool		   _curDepthTest;
+		bool		   _curCullFace;
 	};
 
 }
