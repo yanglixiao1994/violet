@@ -13,7 +13,9 @@ namespace violet {
 		vec3		 _posi;
 		vec3		 _scaler;
 		vec3		 _rotate;
-		mat4		 _toWorld;
+		vec3		 _forward;
+		vec3		 _up;
+		vec3		 _right;
 
 		list<ObjPtr> _childs;
 		ObjPtr       _parent;
@@ -33,6 +35,12 @@ namespace violet {
 			obj->setParent(shared_from_this());
 		}
 	public:
+		virtual vec3 getForward();
+
+		virtual vec3 getUp();
+
+		virtual vec3 getRight();
+
 		virtual void setMesh(const MeshPtr&mesh) {
 			_mesh = mesh;
 		}
@@ -49,28 +57,32 @@ namespace violet {
 
 		virtual void reset() {
 			_toWorld = mat4(1.f);
+			_posi = { 0,0,0 };
+			_rotate = { 0,0,0 };
+			_scaler = { 1,1,1 };
 			for (auto &child : _childs) {
 				child->reset();
 			}
 		}
+
 		virtual void scale(const vec3&factor) {
-			_toWorld = ::scale(_toWorld, factor);
+			_scaler += factor;
 			for (auto &child : _childs) {
 				child->scale(factor);
 			}
 		}
+		//TODO:Get the cpu side euler angle.
 		virtual void rotate(float deg, const vec3&axis) {
-			_toWorld = ::rotate(_toWorld, deg / 180.0f, axis);
+			//_rotate 
 			for (auto &child : _childs) {
 				child->rotate(deg, axis);
 			}
 		}
-		virtual mat4 rotatex(float);
-		virtual mat4 rotatey(float);
-		virtual mat4 rotatez(float);
 
+		virtual void rotate(const vec3&eulerAngle) {
+			_rotate += eulerAngle;
+		}
 		virtual void move(const vec3&step) {
-			_toWorld = translate(_toWorld, step);
 			_posi += step;
 			for (auto &child : _childs) {
 				child->move(step);
@@ -82,11 +94,10 @@ namespace violet {
 		}
 		virtual mat4 getToWorldMat();
 		//virtual void update();
-
 		Object(
-			const vec3&posi = vec3{ 0,0,0 },
-			const vec3&rotate = vec3{0,0,0},
-			const vec3&scaler = vec3{1.f,1.f,1.f},
+			const vec3&posi = { 0,0,0 },
+			const vec3&rotate = {0,0,0},
+			const vec3&scaler = {1.f,1.f,1.f},
 			Object *parent = nullptr,
 			Mesh   *mesh = nullptr,
 			bool dirty = true,
@@ -101,8 +112,6 @@ namespace violet {
 			_dirty{ dirty },
 			_visible{ visible },
 			_shadow{ throwshadow } {};
-
-
 	};
 }
 
