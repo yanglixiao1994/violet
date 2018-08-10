@@ -56,7 +56,6 @@ namespace violet {
 		}
 
 		virtual void reset() {
-			_toWorld = mat4(1.f);
 			_posi = { 0,0,0 };
 			_rotate = { 0,0,0 };
 			_scaler = { 1,1,1 };

@@ -17,19 +17,18 @@ int main() {
 	scene.setRender(render);
 
 	MeshPtr cubeMesh(new Mesh{ "cube.obj" });
-	MeshPtr monkeyMesh(new Mesh{ "monkey.obj" });
+	MeshPtr monkeyMesh(new Mesh{ "monkeyobj.obj" });
 
-	ObjPtr cube1(new Object());
-	ObjPtr cube2(new Object());
-	cube1->setMesh(cubeMesh);
-	cube2->setMesh(cubeMesh);
-	cube2->move(vec3{ 5.f,0.f,0.f });
-	scene.insert(cube1,scene.getRoot());
-	scene.insert(cube2, scene.getRoot());
-
-	ObjPtr monkey(new Object(vec3(0,-5,-5)));
+	ObjPtr monkey(new Object());
 	scene.insert(monkey, scene.getRoot());
 	monkey->setMesh(monkeyMesh);
+	monkey->rotate({ 0,50,0 });
+
+	ObjPtr monkey1(new Object());
+	scene.insert(monkey1, monkey);
+	monkey1->setMesh(monkeyMesh);
+	monkey1->move({ 0,2,0 });
+	monkey1->rotate({ 0,0,50 });
 
 	scene.draw();
 

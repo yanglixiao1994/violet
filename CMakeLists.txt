@@ -60,6 +60,8 @@ add_executable(
 	source/GpuProgram.cpp
 	source/Material.h
 	source/Material.cpp
+	source/Texture.h
+	source/Texture.cpp
 	source/Mesh.h
 	source/Mesh.cpp
 	source/main.cpp

@@ -9,14 +9,17 @@ namespace violet {
 		void bindGlobalEnvironmentInfo(const GlobalEnvironmentInfo&)final override;
 		void bindMaterial(const MatlPtr&)final override;
 		void uploadSubMesh2Gpu(const SubMeshPtr&)final override;
+		void uploadTex2Gpu(const TexPtr&)final override;
 		void bindSubMesh(const SubMeshPtr&)final override;
 		void bindObject(const ObjPtr&)final override;
+
 		GpuBufferPtr createGpuBuffer(BUFFER_USAGE, ATTRIBUTE_TYPE, uint32 size, void* pSource)final override;
 		void draw(const SubMeshPtr&)final override;
 		void swapBuffer()final override;
-		void setColor(float r, float g, float b);
-		void clear();
-		bool isInGpu(const SubMeshPtr&);
+		void setColor(float r, float g, float b)final override;
+		void clear()final override;
+		bool isInGpu(const SubMeshPtr&)final override;
+		bool isInGpu(const TexPtr&)final override;
 		void loadGpuProgram();
 	private:
 		uint							_width;

@@ -1,4 +1,4 @@
-#include "Mesh.h"
+﻿#include "Mesh.h"
 #include "assimp/scene.h"
 #include "assimp/Importer.hpp"
 #include "assimp/postprocess.h"
@@ -73,7 +73,11 @@ namespace violet {
 
 			auto texnum = scene->mMaterials[mesh->mMaterialIndex]->GetTextureCount(aiTextureType_DIFFUSE);
 			for (int i = 0; i < texnum; i++) {
-
+				aiString path;
+				scene->mMaterials[mesh->mMaterialIndex]->GetTexture(aiTextureType_DIFFUSE, i, &path);
+				TexPtr tex{ new Texture{ path.C_Str() } };
+				tex->_type = Texture::TEX_TYPE::TextureType_DIFFUSE;
+				matlp->_texs.push_back(std::move(tex));
 			}
 			sm->_matl = matlp;
 			_submeshs.push_back(sm);

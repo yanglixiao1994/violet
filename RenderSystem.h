@@ -1,5 +1,6 @@
 #pragma once
 #include "light.h"
+#include "Texture.h"
 #include "material.h"
 #include "Mesh.h"
 #include "Camera.h"
@@ -34,6 +35,7 @@ namespace violet {
 		virtual void uploadSubMesh2Gpu(const SubMeshPtr&) = 0;
 		virtual void bindSubMesh(const SubMeshPtr&) = 0;
 		virtual void bindObject(const ObjPtr&) = 0;
+		virtual void uploadTex2Gpu(const TexPtr&) = 0;
 
 		virtual GpuBufferPtr createGpuBuffer(BUFFER_USAGE, ATTRIBUTE_TYPE, uint32 size, void* pSource) = 0;
 		virtual void draw(const SubMeshPtr&) = 0;
@@ -41,6 +43,7 @@ namespace violet {
 		virtual void setColor(float r, float g, float b) = 0;
 		virtual void clear() = 0;
 		virtual bool isInGpu(const SubMeshPtr&) = 0;
+		virtual bool isInGpu(const TexPtr&) = 0;
 
 	protected:
 		DEPTH_FUNCTION _curDepthFunc;

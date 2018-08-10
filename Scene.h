@@ -2,6 +2,7 @@
 #include "Object.h"
 #include "Camera.h"
 #include "Light.h"
+#include "Texture.h"
 #include "RenderSystem.h"
 namespace violet {
 	class Scene {

@@ -24,17 +24,14 @@ namespace violet {
 	}
 
 	vec3 Object::getForward() {
-		stack<vec3>rotates;
-		ObjPtr now = shared_from_this();
-		mat4 finalMat = mat4{1.f};
-		while(now.get()) {
-			rotates.push(now->rotate);
-			now = now->_parent;
-		}
-		while (!rotates.empty()) {
-			finalMat *= math::rotate(rotates.top());
-			rotates.pop();
-		}
-		return finalMat * ;
+		return normalize(vec3(math::rotate(_rotate) * math::forward));
+	}
+
+	vec3 Object::getUp() {
+		return normalize(vec3(math::rotate(_rotate) * math::up));
+	}
+
+	vec3 Object::getRight() {
+		return normalize(vec3(math::rotate(_rotate) * math::right));
 	}
 }

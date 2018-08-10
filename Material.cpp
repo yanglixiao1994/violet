@@ -1,17 +1,8 @@
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+
 #include "Material.h"
 namespace violet {
-	void Texture::loadFile(const std::string&file) {
-		_dataUint8 = stbi_load(file.c_str(), &_width, &_height, &_channels, 0);
-		_dataType = TEX_DATA_TYPE::Uint8;
-		_file = file;
-		_warping = TEX_WARPING_TYPE::Repeat;
-		_filter = TEX_FILTER_METHOD::Nearest;
-	}
-	Texture::Texture(const std::string&file) {
-		loadFile(file);
-	}
+
 	Material::Material(
 		MATL_BLEND_MODEL bm = { MATL_BLEND_MODEL::Opaque },
 		MATL_SHADING_MODEL sm = { MATL_SHADING_MODEL::Phong },

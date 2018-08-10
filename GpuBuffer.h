@@ -14,7 +14,6 @@ namespace violet {
 		Index = 0x10,
 	};
 
-
 	//Vertex Attribute
 	typedef map<ATTRIBUTE_TYPE, glm::vec3>			VertAttr3f;
 	typedef map<ATTRIBUTE_TYPE, vector<glm::vec3>>	VertAttr3fV;

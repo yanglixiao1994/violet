@@ -64,6 +64,8 @@ namespace violet {
 			//renderVec.sort();
 			for (const auto&unit : renderq) {
 				if (!_render->isInGpu(unit._submesh))_render->uploadSubMesh2Gpu(unit._submesh);
+				for (auto &tex : unit._submesh->_matl->_texs)
+					if (!_render->isInGpu(tex))_render->uploadTex2Gpu(tex);
 				_render->bindSubMesh(unit._submesh);
 				_render->bindMaterial(unit._submesh->_matl);
 				_render->bindObject(unit._object);

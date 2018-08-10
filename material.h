@@ -1,5 +1,6 @@
 #pragma once
 #include "auxiliary.h"
+#include "Texture.h"
 
 namespace violet {
 	/*We should focus on material in render field.And the material need to know everthing in the world.
@@ -13,9 +14,9 @@ namespace violet {
 	typedef list<Param2f>					Param2fV;
 	typedef list<Param1f>					Param1fV;
 	typedef list<Param1i>					Param1iV;
-	class Material;
-	typedef shared_ptr<Material> MatlPtr;
-	typedef list<MatlPtr> MatlList;
+	typedef shared_ptr<class Material>		MatlPtr;
+	typedef list<MatlPtr>					MatlList;
+
 
 	enum class DEPTH_FUNCTION {
 		Less,
@@ -28,35 +29,6 @@ namespace violet {
 		Never,
 	};
 
-	class Texture {
-		enum class TEX_FILTER_METHOD {
-			Nearest,
-			Linear,
-		};
-		enum class TEX_DATA_TYPE {
-			Float,
-			Uint8,
-		};
-		enum class TEX_WARPING_TYPE {
-			Repeat,
-			MirroredRepeat,
-			ClampEdge,
-			ClampBorder,
-		};
-	public:
-		Texture(const string&file);
-		void loadFile(const string&file);
-	private:
-		uint8		*	    _dataUint8;
-		float		*		_dataFloat;
-		int					_width;
-		int					_height;
-		int					_channels;
-		string				_file;
-		TEX_DATA_TYPE		_dataType;
-		TEX_WARPING_TYPE	_warping;
-		TEX_FILTER_METHOD	_filter;
-	};
 	enum class MATL_BLEND_MODEL {
 		Opaque,
 		Masked,
@@ -82,6 +54,8 @@ namespace violet {
 		Rigid,
 	};
 	class Material {
+		friend class Mesh;
+		friend class Scene;
 		//The enum is arranged in the render pariority.
 		struct RenderState {
 			MATL_BLEND_MODEL	_blend;
@@ -140,7 +114,7 @@ namespace violet {
 		DEPTH_FUNCTION		_depthFunc;
 		//
 		string				_gpuProgram;
-		vector<Texture>		_texs;
+		TexVec				_texs;
 		Param1f				_param1f;
 		Param2f				_param2f;
 		Param3f				_param3f;
