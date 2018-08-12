@@ -68,16 +68,15 @@ namespace violet {
 		};
 	public:
 		Material(
-			MATL_BLEND_MODEL,
-			MATL_SHADING_MODEL,
-			MATL_DIFFUSE_MODEL,
-			MATL_SPECULAR_MODEL,
-			bool cullface,
-			bool depthtest,
-			DEPTH_FUNCTION depthfunc,
-			const string&gpu_program
+			MATL_BLEND_MODEL bm = { MATL_BLEND_MODEL::Opaque },
+			MATL_SHADING_MODEL sm = { MATL_SHADING_MODEL::Phong },
+			MATL_DIFFUSE_MODEL dm = { MATL_DIFFUSE_MODEL::Lambert },
+			MATL_SPECULAR_MODEL spm = { MATL_SPECULAR_MODEL::Phong },
+			bool cullface = { true },
+			bool depthtest = { false },
+			DEPTH_FUNCTION depthfunc = { DEPTH_FUNCTION::Less },
+			const string&gpu_program = { "Phong" }
 		);
-		Material() {};
 		Material(const std::string&) {};
 		//Compare the pariority
 		bool		operator <=(const Material&)const;
@@ -101,6 +100,7 @@ namespace violet {
 		void				setShadingModel(MATL_SHADING_MODEL shading) { _shading = shading; }
 		void				setCullFace(bool cullface) { _cullface = cullface; }
 		void				setDepthTest(bool depthTest) { _depthTest = depthTest; }
+		void				setMatlFunc(DEPTH_FUNCTION func) { _depthFunc = func; }
 		void				setGpuProgram(const string&gpu_program) { _gpuProgram = gpu_program; }
 	private:
 		friend class glRenderSystem;

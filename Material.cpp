@@ -4,15 +4,16 @@
 namespace violet {
 
 	Material::Material(
-		MATL_BLEND_MODEL bm = { MATL_BLEND_MODEL::Opaque },
-		MATL_SHADING_MODEL sm = { MATL_SHADING_MODEL::Phong },
-		MATL_DIFFUSE_MODEL dm = { MATL_DIFFUSE_MODEL::Lambert },
-		MATL_SPECULAR_MODEL spm = { MATL_SPECULAR_MODEL::Phong },
-		bool cullface = { true },
-		bool depthtest = { false },
-		DEPTH_FUNCTION depthfunc = {DEPTH_FUNCTION::Less},
-		const string&gpu_program = { "Phong" }
-	) :_blend{ bm }, _shading{ sm }, _diffuse{ dm }, _specular{ spm }, _cullface{ cullface }, _depthTest{ depthtest } {};
+		MATL_BLEND_MODEL bm,
+		MATL_SHADING_MODEL sm,
+		MATL_DIFFUSE_MODEL dm,
+		MATL_SPECULAR_MODEL spm,
+		bool cullface,
+		bool depthtest,
+		DEPTH_FUNCTION depthfunc,
+		const string&gpu_program
+	) :_blend{ bm }, _shading{ sm }, _diffuse{ dm }, _specular{ spm },
+		_cullface{ cullface }, _depthTest{ depthtest }, _depthFunc{ depthfunc } {};
 
 	bool Material::operator <= (const Material&m)const {
 		if (_blend <= m._blend)

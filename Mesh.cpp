@@ -56,16 +56,19 @@ namespace violet {
 			aiColor3D specular;
 			aiColor3D emissive;
 
-			scene->mMaterials[mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_AMBIENT, ambient);
-			matlp->insertParam3f("ambient", glm::vec3{ ambient.r,ambient.g,ambient.b });
+			//scene->mMaterials[mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_AMBIENT, ambient);
+			//matlp->insertParam3f("ambient", glm::vec3{ ambient.r,ambient.g,ambient.b });
 			scene->mMaterials[mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_AMBIENT, diffuse);
 			matlp->insertParam3f("diffuse", glm::vec3{ diffuse.r,diffuse.g,diffuse.b });
-			scene->mMaterials[mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_EMISSIVE, emissive);
-			matlp->insertParam3f("emissive", glm::vec3{ emissive.r,emissive.g,emissive.b });
+			matlp->insertParam3f("diffuse", glm::vec3{ 0.f,0.f,0.f });
+
+			//scene->mMaterials[mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_EMISSIVE, emissive);
+			//matlp->insertParam3f("emissive", glm::vec3{ emissive.r,emissive.g,emissive.b });
 
 			matlp->setBlendModel(MATL_BLEND_MODEL::Opaque);
 			matlp->setCullFace(true);
 			matlp->setDepthTest(true);
+			//matlp->setDe
 			matlp->setDiffuseModel(MATL_DIFFUSE_MODEL::Lambert);
 			matlp->setShadingModel(MATL_SHADING_MODEL::Phong);
 			matlp->setSpecularModel(MATL_SPECULAR_MODEL::Phong);
