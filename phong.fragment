@@ -27,11 +27,11 @@ vec3 applyLight(Light light){
 
 	vec3 lightDir_cam =  (V * vec4(light.position,1)).xyz - pos_cam;
 	float diffAngle = clamp(dot(lightDir_cam,normal_cam),0,1);
-	diff = light.color * diffAngle * diffuse;
+	diff = light.color * diffAngle * diffuse * .01f;
 
 	vec3 reflect_cam = reflect(-lightDir_cam,normal_cam);
 	float specAngle = clamp(dot(reflect_cam,eyedir_cam),0,1);
-	spec = specAngle * light.color * .1f;
+	spec = specAngle * light.color * .01f;
 	return diff + spec;
 }
 

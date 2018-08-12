@@ -3,7 +3,7 @@
 #include "assimp/Importer.hpp"
 #include "assimp/postprocess.h"
 
-#define USE_ASSIMP
+//#define USE_ASSIMP
 namespace violet {
 	void Mesh::loadMesh(const string&file) {
 		Assimp::Importer importer;
@@ -15,7 +15,7 @@ namespace violet {
 		if (!scene) {
 			cout << file << " has no scene." << endl;
 		}
-		for (int i = 0; i < scene->mNumMeshes; i++) {
+		for (uint32 i = 0; i < scene->mNumMeshes; i++) {
 			SubMeshPtr sm(new SubMesh());
 			sm->_isInGpu = false;
 			aiMesh *mesh = scene->mMeshes[i];
@@ -31,18 +31,18 @@ namespace violet {
 			sm->_num_vertex_attributes++;
 			Assert(mesh->GetNumUVChannels() <= 3);
 			//Load SubMesh.The default attributes are:position,normal,texcoord[],index.
-			for (int j = 0; j < mesh->mNumVertices; j++) {
+			for (uint32 j = 0; j < mesh->mNumVertices; j++) {
 				sm->_vertattr3fv[ATTRIBUTE_TYPE::Position].push_back(glm::vec3{ mesh->mVertices[j].x,mesh->mVertices[j].y ,mesh->mVertices[j].z });
 				sm->_vertattr3fv[ATTRIBUTE_TYPE::Normal].push_back(glm::vec3{ mesh->mNormals[j].x,mesh->mNormals[j].y ,mesh->mNormals[j].z });
 
 				//TODO:Load more than one texture coordinates.
-				for (int k = 0; k < mesh->GetNumUVChannels(); k++) {
+				for (uint32 k = 0; k < mesh->GetNumUVChannels(); k++) {
 					sm->_vertattr2fv[ATTRIBUTE_TYPE::Texcoordinate].push_back(glm::vec2{ mesh->mTextureCoords[k][j].x,mesh->mTextureCoords[k][j].y });
 					break;
 				}
 			}
 
-			for (int j = 0; j < mesh->mNumFaces; j++) {
+			for (uint32 j = 0; j < mesh->mNumFaces; j++) {
 				auto face = mesh->mFaces[j];
 				Assert(face.mNumIndices == 3);
 				for (int k = 0; k < 3; k++) {
@@ -72,7 +72,7 @@ namespace violet {
 			matlp->setGpuProgram("phong");
 
 			auto texnum = scene->mMaterials[mesh->mMaterialIndex]->GetTextureCount(aiTextureType_DIFFUSE);
-			for (int i = 0; i < texnum; i++) {
+			for (uint32 i = 0; i < texnum; i++) {
 				aiString path;
 				scene->mMaterials[mesh->mMaterialIndex]->GetTexture(aiTextureType_DIFFUSE, i, &path);
 				TexPtr tex{ new Texture{ path.C_Str() } };

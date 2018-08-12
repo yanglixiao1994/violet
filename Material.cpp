@@ -20,7 +20,7 @@ namespace violet {
 				if (_diffuse <= m._diffuse)
 					if (_specular <= m._specular)
 						return true;
-					else return false;
+		return false;
 	}
 
 	void Material::insertParam1f(const string&name, float param) {

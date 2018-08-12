@@ -118,41 +118,41 @@ namespace violet {
 			Assert(paramid != -1);
 			glUniform1f(paramid, para1.second);
 		}
-		for (auto &tex : mat->_texs) {
-			glBindTexture(GL_TEXTURE_2D, tex->_texId);
-			switch (tex->_warping) {
-				case Texture::TEX_WARPING_TYPE::Repeat: {
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-					break;
-				}
-				case Texture::TEX_WARPING_TYPE::MirroredRepeat: {
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-					break;
-				}
-				case Texture::TEX_WARPING_TYPE::ClampEdge: {
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-					break;
-				}
-				case Texture::TEX_WARPING_TYPE::ClampBorder: {
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-					break;
-				}
-			}
-			switch (tex->_filter) {
-				case Texture::TEX_FILTER_METHOD::Linear: {
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				}
-				case Texture::TEX_FILTER_METHOD::Nearest: {
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-				}
-			}
-		}
+		//for (auto &tex : mat->_texs) {
+		//	glBindTexture(GL_TEXTURE_2D, tex->_texId);
+		//	switch (tex->_warping) {
+		//		case Texture::TEX_WARPING_TYPE::Repeat: {
+		//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		//			break;
+		//		}
+		//		case Texture::TEX_WARPING_TYPE::MirroredRepeat: {
+		//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+		//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+		//			break;
+		//		}
+		//		case Texture::TEX_WARPING_TYPE::ClampEdge: {
+		//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		//			break;
+		//		}
+		//		case Texture::TEX_WARPING_TYPE::ClampBorder: {
+		//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+		//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+		//			break;
+		//		}
+		//	}
+		//	switch (tex->_filter) {
+		//		case Texture::TEX_FILTER_METHOD::Linear: {
+		//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		//		}
+		//		case Texture::TEX_FILTER_METHOD::Nearest: {
+		//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		//			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		//		}
+		//	}
+		//}
 		_curMatl = mat;
 	}
 
@@ -226,12 +226,12 @@ namespace violet {
 	}
 
 	void glRenderSystem::uploadTex2Gpu(const TexPtr&tex) {
-		if (tex->isInGpu())return;
-		glGenTextures(1, &tex->_texId);
-		glBindTexture(GL_TEXTURE_2D, tex->_texId);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->_width, tex->_height, 0, GL_RGB, GL_UNSIGNED_BYTE, tex->_dataUint8);
-		glGenerateMipmap(GL_TEXTURE_2D);
-		tex->_inGpu = true;
+		//if (tex->isInGpu())return;
+		//glGenTextures(1, &tex->_texId);
+		//glBindTexture(GL_TEXTURE_2D, tex->_texId);
+		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->_width, tex->_height, 0, GL_RGB, GL_UNSIGNED_BYTE, tex->_dataUint8);
+		//glGenerateMipmap(GL_TEXTURE_2D);
+		//tex->_inGpu = true;
 	}
 
 	void glRenderSystem::bindSubMesh(const SubMeshPtr&submesh) {
