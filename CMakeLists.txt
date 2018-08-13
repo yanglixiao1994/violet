@@ -45,6 +45,10 @@ add_executable(
 	source/auxiliary.cpp
 	source/Camera.cpp
 	source/Camera.h
+	source/Controller.cpp
+	source/Controller.h
+	source/Component.h
+	source/Component.cpp
 	source/Light.cpp
 	source/Light.h
 	source/Object.h

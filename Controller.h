@@ -7,6 +7,9 @@ namespace violet {
 		virtual void update() override {};
 	};
 	class RambleController :public Controller {
+		//friend class Object;
+	public:
+		RambleController(float moveSpeed = 10.f, float rotateSpeed = .001f) :_moveSpeed{ moveSpeed }, _rotateSpeed{ rotateSpeed } {}
 		void setMoveSpeed(float speed) {
 			_moveSpeed = speed;
 		}

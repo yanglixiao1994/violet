@@ -31,6 +31,7 @@ namespace violet {
 		virtual void bindGlobalEnvironmentInfo(const GlobalEnvironmentInfo&) = 0;
 		//Different materials have different "BRDF",texture,etc.
 		virtual void bindMaterial(const MatlPtr&) = 0;
+		virtual void bindTexture(const TexPtr&) = 0;
 		//Upload different vertex attributes,e.g. Position,Normal,TexCoord to Gpu Buffer.
 		virtual void uploadSubMesh2Gpu(const SubMeshPtr&) = 0;
 		virtual void bindSubMesh(const SubMeshPtr&) = 0;

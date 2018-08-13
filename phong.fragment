@@ -1,14 +1,14 @@
 #version 330 core
 #define MAX_LIGHTS 10
-#define MAX_TEXS   3
+#define MAX_TEXS   5
 
-uniform sampler2D tex[MAX_TEXS];
+uniform sampler2D diffTex;
+uniform sampler2D lightTex;
+uniform sampler2D normalTex;
 uniform mat4 V;
 uniform vec3 ambient;
 uniform vec3 diffuse;
 uniform vec3 emissive;
-uniform float K;
-uniform float gloss;
 uniform int numlights;
 uniform struct Light{
 	vec3 position;
@@ -27,7 +27,7 @@ vec3 applyLight(Light light){
 
 	vec3 lightDir_cam =  (V * vec4(light.position,1)).xyz - pos_cam;
 	float diffAngle = clamp(dot(lightDir_cam,normal_cam),0,1);
-	diff = light.color * diffAngle * diffuse ;
+	diff = light.color * diffAngle * diffuse;
 	clamp(diff, 0.0, 1.0);
 
 	vec3 reflect_cam = reflect(-lightDir_cam,normal_cam);
@@ -46,4 +46,6 @@ void main()
 	}
 	_color += clamp(emissive, 0.0f, 0.1f)* .1f;
 	_color += clamp(ambient, 0.0f, 0.1f) * .1f;
+	_color += texture(diffTex,UV).rgb;
+	//_color += texture(lightTex,UV);
 }

@@ -20,6 +20,7 @@ namespace violet {
 		temp.push(_root);
 		for (;temp.size()!=0;) {
 			ObjPtr curobj = temp.front();
+			curobj->update();
 			if (_curCam->isInView(curobj) && curobj->_mesh.get() != nullptr)
 				result.push_back(curobj);
 			for (const auto&child : curobj->_childs) {

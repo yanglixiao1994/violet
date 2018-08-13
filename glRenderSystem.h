@@ -8,6 +8,7 @@ namespace violet {
 		void setGpuProgram(const string&)final override;
 		void bindGlobalEnvironmentInfo(const GlobalEnvironmentInfo&)final override;
 		void bindMaterial(const MatlPtr&)final override;
+		void bindTexture(const TexPtr&)final override;
 		void uploadSubMesh2Gpu(const SubMeshPtr&)final override;
 		void uploadTex2Gpu(const TexPtr&)final override;
 		void bindSubMesh(const SubMeshPtr&)final override;

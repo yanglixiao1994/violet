@@ -1,6 +1,7 @@
 #pragma once
 #include "auxiliary.h"
 #include "Mesh.h"
+#include "Component.h"
 using namespace glm;
 namespace violet {
 	class Object;
@@ -10,6 +11,7 @@ namespace violet {
 		friend class Scene;
 	protected:
 		//The relative information
+		ComList		 _coms;
 		vec3		 _posi;
 		vec3		 _scaler;
 		vec3		 _rotate;
@@ -35,6 +37,17 @@ namespace violet {
 			obj->setParent(shared_from_this());
 		}
 	public:
+		virtual void update() {
+			for (auto &com : _coms) {
+				com->update();
+			}
+		}
+
+		virtual void addComponent(ComPtr&com) {
+			com->_owner = shared_from_this();
+			_coms.push_back(std::move(com));
+		}
+
 		virtual vec3 getForward();
 
 		virtual vec3 getUp();
@@ -81,6 +94,7 @@ namespace violet {
 		virtual void rotate(const vec3&eulerAngle) {
 			_rotate += eulerAngle;
 		}
+
 		virtual void move(const vec3&step) {
 			_posi += step;
 			for (auto &child : _childs) {

@@ -1,14 +1,20 @@
-可实现性：不需要考虑跨平台，不需要考虑支持多种渲染API，不需要为一种特性写多种算法（场景管理，阴影绘制），不需要care上百种文件格式，不需要考虑音效模块，网络模块，编辑器模块。只需要专注实现核心的渲染算法和管理核心的渲染代码。
+It will support get Segmentation and PointCloud in realTime,render a larger Physical-Base simulation scene,and it's realiable on both windows and linux.
+
+1.Component System
+2.Control System
+3.Memory Management System
+4.PBR System
+5.Physical System
+6.Scene Management System
+7.MultiThread
+8.Shader Management System
+9.Linux&Windows&OpenGL&DirectX&Multiple3DFileFormat
 
 
-为什么? 1.为引擎开发新的功能相当于是驾驭这个引擎，
+Deferred Rendering
+Multiple Light
+Instanced Render
+HDR
 
 
 
-控制系统：鼠标 + 键盘 （以回调函数方式提供）
-
-组件系统：以组件的方式扩充物体功能
-
-渲染系统：Phong + Lambert，多光源，贴图，方向光 + 点光源 + 面光源，阴影
-
-物理系统
