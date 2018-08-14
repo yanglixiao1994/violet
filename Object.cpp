@@ -24,7 +24,7 @@ namespace violet {
 	}
 
 	vec3 Object::getForward() {
-		return normalize(vec3(math::rotate(_rotate) * math::forward));
+		return normalize(vec3(math::rotate(_rotate) * -math::forward));
 	}
 
 	vec3 Object::getUp() {

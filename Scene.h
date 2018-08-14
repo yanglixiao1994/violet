@@ -21,7 +21,7 @@ namespace violet {
 
 		MatlList	     _matls;
 		SubMeshList		 _renderList;
-
+		function<void()> _update;
 	public:
 		Scene();
 		void	loadScene(const string&file) {};
@@ -35,5 +35,6 @@ namespace violet {
 		void	setCurCam(const string&);
 		void	insert(ObjPtr obj, ObjPtr&parent);
 		void	draw();
+		void	setUpdate(const function<void()>&);
 	};
 }

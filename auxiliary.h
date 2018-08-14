@@ -16,6 +16,7 @@
 #include <fstream>
 #include <sstream>
 #include <initializer_list>
+#include <functional>
 using namespace std;
 namespace violet {
 

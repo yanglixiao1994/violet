@@ -19,9 +19,9 @@ int main() {
 	RenderSystem *render = new glRenderSystem(WindowInfo("soft body", 1280, 1080, false));
 	scene.setRender(render);
 
-	MeshPtr houseMesh(new Mesh{ "house_01.obj" });
-	MeshPtr floorMesh(new Mesh{ "untitled.obj" });
-	MeshPtr grassMesh(new Mesh{ "Grass_01.obj" });
+	MeshPtr houseMesh(new Mesh{ "G:\\model\\house\\house\\house.obj" });
+	MeshPtr floorMesh(new Mesh{ "G:\\model\\floor.obj" });
+	MeshPtr grassMesh(new Mesh{ "G:\\model\\tree\\tree.obj" });
 	//MeshPtr carMesh(new Mesh{ "tree.obj" });
 
 
@@ -47,6 +47,10 @@ int main() {
 	//car->setMesh(carMesh);
 	//car->move(vec3{ 5.0f,0.f,0.f });
 
+	scene.setUpdate([&grass]() {
+		//cout << "run" << endl;
+		grass->rotate(vec3{ 0.f, 0.1f, 0.f });
+	});
 
 	scene.draw();
 

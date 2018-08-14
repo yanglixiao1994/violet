@@ -50,6 +50,7 @@ namespace violet {
 		_render->setColor(0, 0, 0);
 		RenderQueue renderq;
 		for (;;) {
+			_update();
 			_render->clear();
 			ObjList visiableList = getVisibleObject();
 			renderq.clear();
@@ -81,5 +82,9 @@ namespace violet {
 			}
 			_render->swapBuffer();
 		}
+	}
+	
+	void Scene::setUpdate(const function<void()>&func) {
+		_update = func;
 	}
 }
