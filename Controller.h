@@ -22,5 +22,6 @@ namespace violet {
 		float _lastTime;
 		float _moveSpeed;
 		float _rotateSpeed;
+		double _cursorX, _cursorY;
 	};
 }

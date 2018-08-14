@@ -9,9 +9,10 @@ namespace violet {
 		}
 		_P = glm::perspective(_FOV, 4.f / 3.f, _near, _far);
 		// Camera matrix
+		//cout << getForward().x << " " << getForward().y << " " << getForward().z << endl;
 		_V = glm::lookAt(
 			_posi, // Camera is at (4,3,3), in World Space
-			glm::vec3(0, 0, 0), // and looks at the origin
+			vec3(getToWorldMat() * vec4(getForward(),1.f)), // and looks at the origin
 			glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
 		);
 	}

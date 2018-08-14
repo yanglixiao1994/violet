@@ -17,7 +17,7 @@ namespace violet {
 		Assert(glewInit() == GLEW_OK);
 		glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+		//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 		loadGpuProgram();
 	}
 

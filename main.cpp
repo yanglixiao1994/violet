@@ -11,18 +11,18 @@ int main() {
 	scene.insert(cam, scene.getRoot());
 	scene.setCurCam("walker");
 
-	LightPtr light = make_shared<Light>(vec3(-80,80,80),vec3(0.f,0.f,0.f));
+	LightPtr light = make_shared<Light>(vec3(-80,80,80),vec3(0.7f,0.7f,0.7f));
 	scene.insert(light, scene.getRoot());
 	LightPtr light1 = make_shared<Light>(vec3(80, -80, -80), vec3(0.f, 0.3f, 0.f));
 	//scene.insert(light1, scene.getRoot());
 
-	RenderSystem *render = new glRenderSystem(WindowInfo("soft body", 1024, 768, false));
+	RenderSystem *render = new glRenderSystem(WindowInfo("soft body", 1280, 1080, false));
 	scene.setRender(render);
 
 	MeshPtr houseMesh(new Mesh{ "house_01.obj" });
 	MeshPtr floorMesh(new Mesh{ "untitled.obj" });
 	MeshPtr grassMesh(new Mesh{ "Grass_01.obj" });
-	MeshPtr carMesh(new Mesh{ "tree.obj" });
+	//MeshPtr carMesh(new Mesh{ "tree.obj" });
 
 
 
@@ -42,10 +42,10 @@ int main() {
 	grass->setMesh(grassMesh);
 	grass->move(vec3{ 1.0f,0.f,0.f });
 
-	ObjPtr car(new Object());
-	scene.insert(car, house);
-	car->setMesh(carMesh);
-	car->move(vec3{ 5.0f,0.f,0.f });
+	//ObjPtr car(new Object());
+	//scene.insert(car, house);
+	//car->setMesh(carMesh);
+	//car->move(vec3{ 5.0f,0.f,0.f });
 
 
 	scene.draw();

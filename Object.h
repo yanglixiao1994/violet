@@ -4,13 +4,17 @@
 #include "Component.h"
 using namespace glm;
 namespace violet {
+	/*Objects are the fundamental objects in Violet that represent a node in scene.
+	They do not accomplish much in themselves but they act as containers for Components, 
+	which implement the real functionality.
+	For example, You can control a Object with keyboard by add a control component to the Object.*/
 	class Object;
 	typedef shared_ptr<Object>  ObjPtr;
 	typedef list<ObjPtr> ObjList;
 	class Object:public enable_shared_from_this<Object> {
 		friend class Scene;
 	protected:
-		//The relative information
+		//The relative information to father
 		ComList		 _coms;
 		vec3		 _posi;
 		vec3		 _scaler;
