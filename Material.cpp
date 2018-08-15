@@ -25,15 +25,15 @@ namespace violet {
 	}
 
 	void Material::insertParam1f(const string&name, float param) {
-		_param1f.insert(std::pair<string, float>(name, param));
+		_param1f[name] = param;
 	}
 
 	void Material::insertParam2f(const string&name, const glm::vec2& param) {
-		_param2f.insert(std::pair<string, glm::vec2>(name, param));
+		_param2f[name] = param;
 	}
 
 	void Material::insertParam3f(const string&name, const glm::vec3& param) {
-		_param3f.insert(std::pair<string, glm::vec3>(name, param));
+		_param3f[name] = param;
 	}
 
 	float Material::getParam1f(const string&name)const {

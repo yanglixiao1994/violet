@@ -58,9 +58,13 @@ namespace violet {
 
 			//scene->mMaterials[mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_AMBIENT, ambient);
 			//matlp->insertParam3f("ambient", glm::vec3{ ambient.r,ambient.g,ambient.b });
-			scene->mMaterials[mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_AMBIENT, diffuse);
+			scene->mMaterials[mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse);
+			scene->mMaterials[mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_AMBIENT, ambient);
+			scene->mMaterials[mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_EMISSIVE, emissive);
+
 			matlp->insertParam3f("diffuse", glm::vec3{ diffuse.r,diffuse.g,diffuse.b });
-			matlp->insertParam3f("diffuse", glm::vec3{ 0.f,0.f,0.f });
+			matlp->insertParam3f("ambient", glm::vec3{ ambient.r,ambient.g,ambient.b });
+			matlp->insertParam3f("emissive", glm::vec3{ emissive.r,emissive.g,emissive.b });
 
 			//scene->mMaterials[mesh->mMaterialIndex]->Get(AI_MATKEY_COLOR_EMISSIVE, emissive);
 			//matlp->insertParam3f("emissive", glm::vec3{ emissive.r,emissive.g,emissive.b });
@@ -68,7 +72,7 @@ namespace violet {
 			matlp->setBlendModel(MATL_BLEND_MODEL::Opaque);
 			matlp->setCullFace(true);
 			matlp->setDepthTest(true);
-			//matlp->setDe
+			matlp->setDepthFunc(DEPTH_FUNCTION::Less);
 			matlp->setDiffuseModel(MATL_DIFFUSE_MODEL::Lambert);
 			matlp->setShadingModel(MATL_SHADING_MODEL::Phong);
 			matlp->setSpecularModel(MATL_SPECULAR_MODEL::Phong);

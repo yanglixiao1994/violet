@@ -44,7 +44,7 @@ void main()
 	for(int i = 0;i < numlights;i++){
 		_color += applyLight(Lights[i]);
 	}
-	_color += clamp(emissive, 0.0f, 0.1f)* .1f;
+	_color += clamp(emissive, 0.0f, 0.1f);
 	_color += clamp(ambient, 0.0f, 0.1f) * .1f;
 	//_color += texture(diffTex,UV).rgb;
 	//_color += texture(lightTex,UV);

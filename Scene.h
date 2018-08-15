@@ -12,6 +12,8 @@ namespace violet {
 		};
 		using RenderQueue = vector<RenderUnit>;
 	private:
+		MeshPtr			 _dirArrow;
+		bool			 _startEditor;
 		ObjPtr		  	 _root;
 		RenderSystem *	 _render;
 
@@ -22,12 +24,11 @@ namespace violet {
 		MatlList	     _matls;
 		SubMeshList		 _renderList;
 		function<void()> _update;
+		void drawRenderUnits(const RenderQueue&);
+		void drawRenderUnit(const RenderUnit&);
 	public:
-		Scene();
+		Scene(RenderSystem*const rs);
 		void	loadScene(const string&file) {};
-		void	setRender(RenderSystem*rs) {
-			_render = rs;
-		}
 		ObjPtr  getRoot() {
 			return _root;
 		}

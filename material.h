@@ -100,7 +100,7 @@ namespace violet {
 		void				setShadingModel(MATL_SHADING_MODEL shading) { _shading = shading; }
 		void				setCullFace(bool cullface) { _cullface = cullface; }
 		void				setDepthTest(bool depthTest) { _depthTest = depthTest; }
-		void				setMatlFunc(DEPTH_FUNCTION func) { _depthFunc = func; }
+		void				setDepthFunc(DEPTH_FUNCTION func) { _depthFunc = func; }
 		void				setGpuProgram(const string&gpu_program) { _gpuProgram = gpu_program; }
 	private:
 		friend class glRenderSystem;
