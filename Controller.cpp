@@ -37,20 +37,18 @@ namespace violet {
 		}
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
 			//_owner->move(vec3{ _deltaTime * _moveSpeed ,0.f,0.f});
-			_owner->move(-_deltaTime * _moveSpeed * _owner->getRight());
+			_owner->move(_deltaTime * _moveSpeed * _owner->getRight());
 		}
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
 			//_owner->move(vec3{ -_deltaTime * _moveSpeed ,0.f,0.f });
-			_owner->move(_deltaTime * _moveSpeed * _owner->getRight());
+			_owner->move(-_deltaTime * _moveSpeed * _owner->getRight());
 		}
-		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_LEFT_ALT) == GLFW_PRESS) {
-			
-		}
+
 		auto leftButton = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
 		switch (leftButton) {
 			case GLFW_PRESS: {
 				if (lookAround) {
-					_owner->rotate(vec3{ (newy - _cursorY) * _deltaTime * _lookAroundSpeed,
+					_owner->rotate(vec3{ -(newy - _cursorY) * _deltaTime * _lookAroundSpeed,
 						-(newx - _cursorX) * _deltaTime * _lookAroundSpeed,0.f });
 				}
 				lookAround = true;

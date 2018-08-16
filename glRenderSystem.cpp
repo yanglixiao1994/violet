@@ -260,7 +260,24 @@ namespace violet {
 		if (tex->isInGpu())return;
 		glGenTextures(1, &tex->_texId);
 		glBindTexture(GL_TEXTURE_2D, tex->_texId);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->_width, tex->_height, 0, GL_RGB, GL_UNSIGNED_BYTE, tex->_dataUint8);
+		switch (tex->_format) {
+		case Texture::TEX_FORMAT::R:
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_R, tex->_width, tex->_height, 
+				0, GL_R, GL_UNSIGNED_BYTE, tex->_dataUint8);
+			break;
+		case Texture::TEX_FORMAT::RG:
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RG, tex->_width, tex->_height,
+				0, GL_RG, GL_UNSIGNED_BYTE, tex->_dataUint8);
+			break;
+		case Texture::TEX_FORMAT::RGB:
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tex->_width, tex->_height,
+				0, GL_RGB, GL_UNSIGNED_BYTE, tex->_dataUint8);
+			break;
+		case Texture::TEX_FORMAT::RGBA:
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->_width, tex->_height,
+				0, GL_RGBA, GL_UNSIGNED_BYTE, tex->_dataUint8);
+			break;
+		}
 		glGenerateMipmap(GL_TEXTURE_2D);
 		tex->_inGpu = true;
 	}

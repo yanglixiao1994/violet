@@ -27,7 +27,10 @@ vec3 applyLight(Light light){
 
 	vec3 lightDir_cam =  (V * vec4(light.position,1)).xyz - pos_cam;
 	float diffAngle = clamp(dot(lightDir_cam,normal_cam),0,1);
-	diff = light.color * diffAngle * diffuse * texture(diffTex,UV).rgb;
+	vec4 texColor = texture(diffTex,UV);
+	if(texColor.a < 0.1)
+		discard;
+	diff = light.color * diffAngle * diffuse * texColor.rgb;
 	clamp(diff, 0.0, 1.0);
 
 	vec3 reflect_cam = reflect(-lightDir_cam,normal_cam);

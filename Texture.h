@@ -98,6 +98,14 @@ namespace violet {
 			ClampEdge,
 			ClampBorder,
 		};
+		enum class TEX_FORMAT {
+			DepthComponet,
+			DepthStencil,
+			R,
+			RG,
+			RGB,
+			RGBA
+		};
 	public:
 		Texture(const string&file);
 		void loadFile(const string&file);
@@ -113,6 +121,7 @@ namespace violet {
 		TEX_TYPE			_type;
 		TEX_WARPING_TYPE	_warping;
 		TEX_FILTER_METHOD	_filter;
+		TEX_FORMAT			_format;
 		uint32				_texId;
 		bool				_inGpu;
 	};

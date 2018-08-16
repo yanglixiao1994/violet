@@ -12,7 +12,7 @@ namespace violet {
 		//cout << getForward().x << " " << getForward().y << " " << getForward().z << endl;
 		_V = glm::lookAt(
 			_posi, // Camera is at (4,3,3), in World Space
-			_posi + vec3(getToWorldMat() * vec4(getForward(),0.f)), // and looks at the origin
+			_posi + vec3(getToWorldMat() * math::forward), // and looks at the origin
 			glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
 		);
 	}

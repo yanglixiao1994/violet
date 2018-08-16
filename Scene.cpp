@@ -22,7 +22,7 @@ namespace violet {
 		for (;temp.size()!=0;) {
 			ObjPtr curobj = temp.front();
 			curobj->update();
-			if (_curCam->isInView(curobj) && curobj->_mesh.get() != nullptr)
+			if (_curCam->isInView(curobj))// && curobj->_mesh.get() != nullptr)
 				result.push_back(curobj);
 			for (const auto&child : curobj->_childs) {
 				temp.push(child);
@@ -93,6 +93,7 @@ namespace violet {
 			ObjList visiableList = getVisibleObject();
 			renderq.clear();
 			for (const auto&obj : visiableList) {
+				if (obj->_mesh.get() == nullptr)continue;
 				SubMeshVec smv = obj->getSubMesh();
 				RenderUnit unit;
 				unit._object = obj;

@@ -8,7 +8,7 @@ namespace violet {
 	};
 	class RambleController :public Controller {
 	public:
-		RambleController(float moveSpeed = 10.f, float lookAroundSpeed = 4.f, 
+		RambleController(float moveSpeed = 10.f, float lookAroundSpeed = 8.f, 
 			float zoomSpeed = .3f, float slideAroundSpeed = .05f);
 		
 		void setMoveSpeed(float speed) {
