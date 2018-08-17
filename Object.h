@@ -15,6 +15,9 @@ namespace violet {
 		friend class Scene;
 	protected:
 		//The relative information to father
+		strList		 _tags;
+		string		 _name;
+
 		ComList		 _coms;
 		vec3		 _posi;
 		vec3		 _scaler;
@@ -60,6 +63,10 @@ namespace violet {
 
 		virtual void setMesh(const MeshPtr&mesh) {
 			_mesh = mesh;
+		}
+
+		virtual MeshPtr getMesh() {
+			return _mesh;
 		}
 
 		virtual void loadMesh(const string&file) {

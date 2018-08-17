@@ -24,12 +24,15 @@ out vec3 _color;
 
 vec3 applyLight(Light light){
 	vec3 spec,diff;
+	vec4 texColor = vec4(0.f,0.f,0.f,1.f);
 
 	vec3 lightDir_cam =  (V * vec4(light.position,1)).xyz - pos_cam;
 	float diffAngle = clamp(dot(lightDir_cam,normal_cam),0,1);
-	vec4 texColor = texture(diffTex,UV);
-	if(texColor.a < 0.1)
+
+	texColor = texture(diffTex,UV);
+	if(texColor.a < 0.01)
 		discard;
+	
 	diff = light.color * diffAngle * diffuse * texColor.rgb;
 	clamp(diff, 0.0, 1.0);
 

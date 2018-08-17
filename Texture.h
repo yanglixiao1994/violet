@@ -110,12 +110,20 @@ namespace violet {
 		Texture(const string&file);
 		void loadFile(const string&file);
 		bool isInGpu() { return _inGpu; }
+
+		void		insertParam3f(const string&name, const glm::vec3&param);
+		void		insertParam2f(const string&name, const glm::vec2&param);
+		void		insertParam1f(const string&name, float param);
+		glm::vec3	getParam3f(const string&name)const;
+		glm::vec2	getParam2f(const string&name)const;
+		float		getParam1f(const string&name)const;
+
+		void free();
 	private:
 		uint8		*		_dataUint8;
 		float		*		_dataFloat;
 		int					_width;
 		int					_height;
-		int					_channels;
 		string				_file;
 		TEX_DATA_TYPE		_dataType;
 		TEX_TYPE			_type;
@@ -124,5 +132,8 @@ namespace violet {
 		TEX_FORMAT			_format;
 		uint32				_texId;
 		bool				_inGpu;
+		Param1f				_param1f;
+		Param2f				_param2f;
+		Param3f				_param3f;
 	};
 }

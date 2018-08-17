@@ -26,6 +26,12 @@ namespace violet {
 		uint32					_vaoid;
 		bool					_isInGpu;
 		bool operator <=(const SubMesh&)const;
+		void free() {
+			_vertattr1fv.clear();
+			_vertattr2fv.clear();
+			_vertattr3fv.clear();
+			_vertattr1iv.clear();
+		}
 	};
 	typedef shared_ptr<SubMesh> SubMeshPtr;
 	typedef vector<SubMeshPtr> SubMeshVec;
@@ -47,4 +53,5 @@ namespace violet {
 		string      _file;
 	};
 	using MeshPtr = shared_ptr<Mesh>;
+	using MeshList = list<MeshPtr>;
 }

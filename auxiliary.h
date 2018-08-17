@@ -20,6 +20,16 @@
 using namespace std;
 namespace violet {
 
+	typedef map<string, glm::vec3>			Param3f;
+	typedef map<string, glm::vec2>			Param2f;
+	typedef map<string, float>				Param1f;
+	typedef map<string, int>				Param1i;
+	typedef list<Param3f>					Param3fV;
+	typedef list<Param2f>					Param2fV;
+	typedef list<Param1f>					Param1fV;
+	typedef list<Param1i>					Param1iV;
+
+	typedef list<string>strList;
 	typedef unsigned int uint32;
 	typedef unsigned long uint64;
 	typedef unsigned short uint16;

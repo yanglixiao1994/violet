@@ -14,23 +14,6 @@ namespace violet {
 		}
 		Assert(1 == 2);//No Camera
 	}
-	/*Get all visible Object start from the Root by traverse the Object tree.*/
-	ObjList Scene::getVisibleObject() {
-		ObjList result;
-		queue<ObjPtr>temp;
-		temp.push(_root);
-		for (;temp.size()!=0;) {
-			ObjPtr curobj = temp.front();
-			curobj->update();
-			if (_curCam->isInView(curobj))// && curobj->_mesh.get() != nullptr)
-				result.push_back(curobj);
-			for (const auto&child : curobj->_childs) {
-				temp.push(child);
-			}
-			temp.pop();
-		}
-		return result;
-	}
 
 	void Scene::insert(ObjPtr obj, ObjPtr&parent)
 	{
@@ -50,8 +33,6 @@ namespace violet {
 	void Scene::drawRenderUnits(const RenderQueue&renderq){
 		for (const auto&unit : renderq) {
 			if (!_render->isInGpu(unit._submesh))_render->uploadSubMesh2Gpu(unit._submesh);
-			//for (auto &tex : unit._submesh->_matl->_texs)
-			//	if (!_render->isInGpu(tex))_render->uploadTex2Gpu(tex);
 			_render->bindSubMesh(unit._submesh);
 			_render->bindMaterial(unit._submesh->_matl);
 			_render->bindObject(unit._object);
@@ -68,8 +49,7 @@ namespace violet {
 
 	void Scene::drawRenderUnit(const RenderUnit&unit) {
 		if (!_render->isInGpu(unit._submesh))_render->uploadSubMesh2Gpu(unit._submesh);
-		//for (auto &tex : unit._submesh->_matl->_texs)
-		//	if (!_render->isInGpu(tex))_render->uploadTex2Gpu(tex);
+
 		_render->bindSubMesh(unit._submesh);
 		_render->bindMaterial(unit._submesh->_matl);
 		_render->bindObject(unit._object);
@@ -84,13 +64,18 @@ namespace violet {
 	}
 
 	void Scene::draw() {
+		static bool firstTime = true;
 		_render->setColor(0, 0, 0);
 		RenderQueue renderq;
 		for (;;) {
 			_update();
 			/*Push Visible SubMesh into RenderQueue*/
 			_render->clear();
-			ObjList visiableList = getVisibleObject();
+			ObjList visiableList = findObjIf([this](const ObjPtr&obj)->bool {
+				if (_curCam->isInView(obj))
+					return true;
+				else return false;
+			});
 			renderq.clear();
 			for (const auto&obj : visiableList) {
 				if (obj->_mesh.get() == nullptr)continue;
@@ -108,7 +93,6 @@ namespace violet {
 			if (_startEditor) {
 				/*Push direction arrows(red for forward,green for up,blue for right)into RenderQueue*/
 				for (const auto &obj : visiableList) {
-					renderq.clear();
 					ObjPtr redArrow(new Object{}), greenArrow(new Object{}), blueArrow(new Object{});
 					redArrow->_posi = greenArrow->_posi = blueArrow->_posi = vec3{0,0,0};
 					redArrow->setParent(obj);
@@ -152,9 +136,48 @@ namespace violet {
 				}
 			}
 			_render->swapBuffer();
+			//if (firstTime) {
+			//	firstTime = false;
+			//	foreachObj([](const ObjPtr&obj) {
+			//		if (obj->getMesh().get() != nullptr) {
+			//			obj->getMesh()->clear();
+			//		}
+			//	});
+			//}
 		}
 	}
 	
+	void Scene::foreachObj(const function<void(ObjPtr)>&func) {
+		queue<ObjPtr>temp;
+		temp.push(_root);
+		for (; temp.size() != 0;) {
+			ObjPtr curobj = temp.front();
+			curobj->update();
+			func(curobj);
+			for (const auto&child : curobj->_childs) {
+				temp.push(child);
+			}
+			temp.pop();
+		}
+	}
+
+	ObjList Scene::findObjIf(const function<bool(ObjPtr)>&predicate) {
+		ObjList result;
+		queue<ObjPtr>temp;
+		temp.push(_root);
+		for (; temp.size() != 0;) {
+			ObjPtr curobj = temp.front();
+			curobj->update();
+			if(predicate(curobj))
+				result.push_back(curobj);
+			for (const auto&child : curobj->_childs) {
+				temp.push(child);
+			}
+			temp.pop();
+		}
+		return result;
+	}
+
 	void Scene::setUpdate(const function<void()>&func) {
 		_update = func;
 	}

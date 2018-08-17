@@ -32,10 +32,11 @@ namespace violet {
 		ObjPtr  getRoot() {
 			return _root;
 		}
-		ObjList getVisibleObject();
 		void	setCurCam(const string&);
 		void	insert(ObjPtr obj, ObjPtr&parent);
 		void	draw();
 		void	setUpdate(const function<void()>&);
+		void	foreachObj(const std::function<void(ObjPtr)>&);
+		ObjList	findObjIf(const std::function<bool(ObjPtr)>&);
 	};
 }

@@ -131,7 +131,8 @@ namespace violet {
 			case Texture::TEX_TYPE::TextureType_DIFFUSE: {
 				glActiveTexture(GL_TEXTURE0);
 				sampler = glGetUniformLocation(_curGpuProgram, "diffTex");
-				glUniform1i(sampler, 0);
+				Assert(sampler != -1);
+				glUniform1i(sampler, 0);	
 				break;
 			}
 			case Texture::TEX_TYPE::TextureType_NORMALS: {
@@ -146,6 +147,23 @@ namespace violet {
 				glUniform1i(sampler, 2);
 				break;
 			}
+		}
+		for (const auto &para3 : tex->_param3f) {
+			GLuint paramid = glGetUniformLocation(_curGpuProgram, para3.first.c_str());
+			Assert(paramid != -1);
+			glUniform3f(paramid, para3.second.x, para3.second.y, para3.second.z);
+		}
+
+		for (const auto &para2 : tex->_param2f) {
+			GLuint paramid = glGetUniformLocation(_curGpuProgram, para2.first.c_str());
+			Assert(paramid != -1);
+			glUniform2f(paramid, para2.second.x, para2.second.y);
+		}
+
+		for (const auto &para1 : tex->_param1f) {
+			GLuint paramid = glGetUniformLocation(_curGpuProgram, para1.first.c_str());
+			Assert(paramid != -1);
+			glUniform1f(paramid, para1.second);
 		}
 		if (!tex->isInGpu())uploadTex2Gpu(tex);
 		Assert(sampler != -1);
@@ -253,6 +271,7 @@ namespace violet {
 					p1i.second.size() * sizeof(int), (void*)&(p1i.second[0]));
 				submesh->_gpubuffers.push_back(std::move(gbuff));
 			}
+			//submesh->free();
 		}
 	}
 
@@ -278,6 +297,7 @@ namespace violet {
 				0, GL_RGBA, GL_UNSIGNED_BYTE, tex->_dataUint8);
 			break;
 		}
+		tex->free();
 		glGenerateMipmap(GL_TEXTURE_2D);
 		tex->_inGpu = true;
 	}

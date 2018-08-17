@@ -6,14 +6,7 @@ namespace violet {
 	/*We should focus on material in render field.And the material need to know everthing in the world.
 	So we put all in the Material file(Such as Lights,Cameras,Objects).*/
 	/*The key of Material's parameter should be the same as the uniform variable name in shader.*/
-	typedef map<string, glm::vec3>			Param3f;
-	typedef map<string, glm::vec2>			Param2f;
-	typedef map<string, float>				Param1f;
-	typedef map<string, int>				Param1i;
-	typedef list<Param3f>					Param3fV;
-	typedef list<Param2f>					Param2fV;
-	typedef list<Param1f>					Param1fV;
-	typedef list<Param1i>					Param1iV;
+
 	typedef shared_ptr<class Material>		MatlPtr;
 	typedef list<MatlPtr>					MatlList;
 
