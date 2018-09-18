@@ -46,6 +46,7 @@ namespace violet {
 		virtual bool isInGpu(const SubMeshPtr&) = 0;
 		virtual bool isInGpu(const TexPtr&) = 0;
 
+
 	protected:
 		DEPTH_FUNCTION _curDepthFunc;
 		bool		   _curDepthTest;

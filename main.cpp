@@ -26,8 +26,8 @@ int main() {
 	MeshPtr floorMesh(new Mesh{ "G:\\model\\floor.obj" });
 	MeshPtr grassMesh(new Mesh{ "G:\\model\\tree\\tree.obj" });*/
 	//MeshPtr carMesh(new Mesh{ "tree.obj" });
-	MeshPtr houseMesh(new Mesh{ "house_01.obj" });
-	MeshPtr floorMesh(new Mesh{ "untitled.obj" });
+	MeshPtr houseMesh(new Mesh{ "./resource/house/house_01.obj" });
+	MeshPtr floorMesh(new Mesh{ "./resource/floor/untitled.obj" });
 	MeshPtr grassMesh(new Mesh{ "./resource/tree/Tree.obj" });
 	MeshPtr palmMesh(new Mesh{ "./resource/palm/palm.obj" });
 
